@@ -9,7 +9,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
-        self.current_level_index = 1
+        self.current_level_index = 0
         self.playing = True
         self.current_level = level_map[self.current_level_index]
 
@@ -34,6 +34,10 @@ class Game:
                     self.running = False
                     self.playing = False
                     pygame.quit()
+
+            for i in range(3):
+                print(i)
+                
 
             self.level.run()
             pygame.display.update()

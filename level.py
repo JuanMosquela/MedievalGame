@@ -16,6 +16,8 @@ class Level:
         self.distance = 0
         self.completed = False
         self.current_level = current_level
+        self.completed = False
+        self.level_limit = 2200
        
 
         # terrain
@@ -215,7 +217,7 @@ class Level:
             if pygame.sprite.spritecollide(enemy, self.obstacles_sprites, False):
                 enemy.change_direction()
 
-                
+
     def check_tramps_collisions(self):
         player = self.player_group.sprite
         tramps_colitions = pygame.sprite.spritecollide(
@@ -385,7 +387,7 @@ class Level:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x >= (screen_width / 2) and direction_x > 0 and self.distance < 2200:
+        if player_x >= (screen_width / 2) and direction_x > 0 and self.distance < self.level_limit:
             self.move_world = -8
             self.distance -= self.move_world
             player.speed = 0
@@ -396,7 +398,10 @@ class Level:
 
         else:
             self.move_world = 0
-            player.speed = 8       
+            player.speed = 8   
+            if player.rect.x >= screen_width:
+                self.completed = True 
+                print("level comleted")   
        
 
 
@@ -440,7 +445,7 @@ class Level:
 
         self.check_take_key()
         self.check_arrow_collitions()
-        # self.detect_proyectiles()
+        
         self.proyectiles_collision()
         self.check_tramps_collisions()
         self.coins_collision()

@@ -173,9 +173,7 @@ class Player(pygame.sprite.Sprite):
             if is_last_frame:
                 self.state = "idle"
                 self.is_hurt = False
-            # else:
-            #     self.image.fill((255,255,255, 0))
-
+           
         if not self.is_alive and is_last_frame:
             self.current_frame = len(animation) - 1
             
@@ -211,10 +209,7 @@ class Player(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
 
         if current_time - self.last_hurt_time >= self.cooldown_time:
-            self.invulnerable = False
-
-
-        print(self.points)
+            self.invulnerable = False  
 
       
         
@@ -224,5 +219,5 @@ class Player(pygame.sprite.Sprite):
 
      
 
-        # self.screen.blit(self.mask_image, self.rect.topleft)
+       
        
