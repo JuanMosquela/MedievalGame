@@ -363,19 +363,18 @@ class Level:
 
     def enemy_vertical_collision(self):
         for enemy in self.enemys.sprites():
-            if enemy.type != "flyingEye":
+            # if enemy.type != "flyingEye":
             
-                enemy.apply_gravity()      
-            
+            enemy.apply_gravity()             
 
-                for sprite in self.terrain_sprites.sprites():
-                    if sprite.rect.colliderect(enemy.rect):
-                        # Si el enemigo está cayendo y hay una plataforma debajo
-                        if enemy.direction.y > 0:
-                            enemy.rect.bottom = sprite.rect.top
-                            enemy.direction.y = 0
-                            enemy.on_ground = True
-                            self.collided = True  # Se produjo una colisión
+            for sprite in self.terrain_sprites.sprites():
+                if sprite.rect.colliderect(enemy.rect):
+                    # Si el enemigo está cayendo y hay una plataforma debajo
+                    if enemy.direction.y > 0:
+                        enemy.rect.bottom = sprite.rect.top
+                        enemy.direction.y = 0
+                        enemy.on_ground = True
+                        self.collided = True  # Se produjo una colisión
 
            
 

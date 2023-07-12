@@ -17,6 +17,7 @@ class Enemy(pygame.sprite.Sprite):
   
         self.current_frame = 0
         self.frame_velocity = 0.15
+        self.gravity = 0.8
         self.state = None
         self.image = None  # No asignar ninguna imagen aún
         self.rect = None  # No asignar ningún rectángulo aún
@@ -54,6 +55,12 @@ class Enemy(pygame.sprite.Sprite):
 
     def set_initial_state(self):
         raise NotImplementedError("Subclass must implement set_initial_state()")
+    
+    def apply_gravity(self):
+        if self.type != "flyingEye" or not  self.is_alive :
+
+            self.direction.y += self.gravity
+            self.rect.y += self.direction.y 
 
 
     def import_enemy_assets(self):
@@ -155,16 +162,12 @@ class Enemy(pygame.sprite.Sprite):
 class NormalEnemy(Enemy):
     def __init__(self, pos, type, health, damage, speed, reward, screen, player) -> None:
         super().__init__(pos, type, health, damage, speed, reward, screen, player)
-        self.gravity = 0.8
+        
         self.state = "idle"
         self.image = self.animations[self.state][self.current_frame]
         self.rect = self.image.get_rect(center=self.pos)
         self.mask = pygame.mask.from_surface(self.image)
-
-    def apply_gravity(self):
-
-        self.direction.y += self.gravity
-        self.rect.y += self.direction.y
+ 
 
     def check_collision(self, rect):
         if pygame.sprite.collide_rect(rect, self.player):
@@ -178,7 +181,6 @@ class NormalEnemy(Enemy):
           
 
     def update_enemy_vision(self):
-
         rect_width = 200
         vision_rect = pygame.Rect(self.rect.centerx - rect_width - (self.rect.width / 2),
                                   self.rect.centery - (self.rect.height / 2),
@@ -264,12 +266,13 @@ class FlyingEnemy(Enemy):
                
 
     def fly(self):
-        self.rect.x += self.speed    
+        if self.is_alive:
+            self.rect.x += self.speed    
 
     def shoot(self):
         current_time = pygame.time.get_ticks()
 
-        if current_time - self.last_attack >= self.attack_cooldown:
+        if current_time - self.last_attack >= self.attack_cooldown and self.is_alive:
 
             self.last_attack = current_time
             self.is_attacking = True
