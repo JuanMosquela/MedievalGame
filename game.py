@@ -9,11 +9,11 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
-        self.current_level_index = 2
+        self.current_level_index = 1
         self.playing = True
         self.current_level = level_map[self.current_level_index]
 
-        self.level = Level(self.screen, self.current_level)
+        self.level = Level(self.screen, self.current_level, self.current_level_index)
 
         self.running = True
         self.playing = True
@@ -36,10 +36,5 @@ class Game:
                     pygame.quit()
 
             self.level.run()
-            # horizontal_line = screen_height -80  # Altura de la línea en la mitad de la pantalla
-            # pygame.draw.line(self.screen, (255, 255, 255), (0, horizontal_line), (screen_width, horizontal_line))
-            # pygame.draw.line(self.screen, (255, 255, 255), (0,  (screen_height + 80) - screen_height), (screen_width,  (screen_height + 80) - screen_height))
-
-
             pygame.display.update()
             self.clock.tick(60)

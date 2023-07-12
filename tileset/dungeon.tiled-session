@@ -31,6 +31,14 @@
             "scaleInDock": 1.5,
             "scaleInEditor": 1
         },
+        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/untitled.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 383.3333333333333,
+                "y": -310.6060606060605
+            }
+        },
         "C:/Users/Juanmaa/Desktop/MedievalGame/tiles/forest.tmx": {
             "scale": 0.22799999999999998,
             "selectedLayer": 0,
@@ -69,8 +77,8 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "C:/Users/Juanmaa/Desktop/MedievalGame/levels/2",
-    "last.imagePath": "C:/Users/Juanmaa/Downloads/Legacy-Dungeon_V0.2_vacaroxa (1)/Final/Assets",
+    "last.exportedFilePath": "C:/Users/Juanmaa/Desktop/MedievalGame/levels/0",
+    "last.imagePath": "C:/Users/Juanmaa/Downloads/Legacy Adventure Pack - CEMETERY/Assets",
     "map.height": 20,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
@@ -100,5 +108,5 @@
         "height": 16,
         "width": 16
     },
-    "tileset.type": 1
+    "tileset.type": 0
 }

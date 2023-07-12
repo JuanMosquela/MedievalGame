@@ -9,12 +9,13 @@ from level_data import background_paths
 
 
 class Level:
-    def __init__(self, screen, level_map) -> None:
+    def __init__(self, screen, level_map, current_level) -> None:
         self.screen = screen
         self.move_world = -1
         self.move_world_y = 0
         self.distance = 0
         self.completed = False
+        self.current_level = current_level
        
 
         # terrain
@@ -71,18 +72,18 @@ class Level:
         
         
 
-    #     self.backgrounds = []
+        self.backgrounds = []
 
-    #     for path in background_paths:
-    #         background = pygame.image.load(path).convert_alpha()
-    #         background = pygame.transform.scale(
-    #             background, (screen_width, screen_height))
-    #         background_rect = background.get_rect()
-    #         self.backgrounds.append((background, background_rect))
+        for path in background_paths:
+            background = pygame.image.load(path).convert_alpha()
+            background = pygame.transform.scale(
+                background, (screen_width, screen_height))
+            background_rect = background.get_rect()
+            self.backgrounds.append((background, background_rect))
 
-    # def draw_background(self):
-    #     for background, background_rect in self.backgrounds:
-    #         self.screen.blit(background, background_rect)
+    def draw_background(self):
+        for background, background_rect in self.backgrounds:
+            self.screen.blit(background, background_rect)
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -96,7 +97,7 @@ class Level:
 
                     if type == "terrain":
                         terrain_tiles = import_cut_graphics(
-                            "./assets/terrain/terrain.png")
+                            f"./assets/terrain/{self.current_level}/terrain.png")
                         tile_surface = terrain_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -107,7 +108,7 @@ class Level:
 
                     if type == "background":
                         background_tiles = import_cut_graphics(
-                            "./assets/terrain/terrain.png")
+                            f"./assets/terrain/{self.current_level}/terrain.png")
                         tile_surface = background_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -117,7 +118,7 @@ class Level:
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
                     if type == "decorations":
-                        decorations_tiles = import_cut_graphics("./assets/terrain/terrain.png")
+                        decorations_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain.png")
                         tile_surface = decorations_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -127,7 +128,7 @@ class Level:
 
                     
                     if type == "tramps":
-                        tramps_tiles = import_cut_graphics("./assets/terrain/terrain.png")
+                        tramps_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain.png")
                         tile_surface = tramps_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -141,7 +142,7 @@ class Level:
                         sprite = Tile(x, y, tile_size)
 
                     if type == "puzzles":
-                        puzzle_tiles = import_cut_graphics("./assets/terrain/terrain_2.png")
+                        puzzle_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain_2.png")
                         tile_surface = puzzle_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -150,7 +151,7 @@ class Level:
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
                     if type == "keys":
-                        keys_tiles = import_cut_graphics("./assets/terrain/terrain_2.png")
+                        keys_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain_2.png")
                         tile_surface = keys_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -159,7 +160,7 @@ class Level:
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
                     if type == "coins":
-                        coin_tiles = import_cut_graphics("./assets/terrain/terrain_2.png")
+                        coin_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain_2.png")
                         tile_surface = coin_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -213,6 +214,8 @@ class Level:
         for enemy in self.enemys.sprites():
             if pygame.sprite.spritecollide(enemy, self.obstacles_sprites, False):
                 enemy.change_direction()
+
+                
     def check_tramps_collisions(self):
         player = self.player_group.sprite
         tramps_colitions = pygame.sprite.spritecollide(
@@ -267,8 +270,7 @@ class Level:
         player = self.player_group.sprite
 
         for coin in self.coins_sprites:
-            if pygame.sprite.collide_rect(player, coin): 
-                print("colision")         
+            if pygame.sprite.collide_rect(player, coin):                   
                 player.increse_points(5)
                 coin.kill()       
 
@@ -383,7 +385,7 @@ class Level:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x >= (screen_width / 2) and direction_x > 0 and self.distance < 2500:
+        if player_x >= (screen_width / 2) and direction_x > 0 and self.distance < 2200:
             self.move_world = -8
             self.distance -= self.move_world
             player.speed = 0
@@ -400,7 +402,7 @@ class Level:
 
     def run(self):
      
-
+        self.draw_background()
         self.scroll_x()
       
 
