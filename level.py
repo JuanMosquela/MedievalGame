@@ -40,8 +40,8 @@ class Level:
         self.obstacles_sprites = self.create_tile_group(self.obstacles_layout, "obstacles")
 
         #obstacles
-        self.puzzle_layout = import_csv(level_map["puzzle"])
-        self.puzzle_sprites = self.create_tile_group(self.puzzle_layout, "puzzle")
+        self.puzzle_layout = import_csv(level_map["puzzles"])
+        self.puzzle_sprites = self.create_tile_group(self.puzzle_layout, "puzzles")
         
 
 
@@ -132,14 +132,14 @@ class Level:
                     if type == "obstacles":
                         sprite = Tile(x, y, tile_size)
 
-                    if type == "puzzle":
-                        tramps_tiles = import_cut_graphics("./assets/terrain/terrain_2.png")
-                        tile_surface = tramps_tiles[int(val)]
+                    if type == "puzzles":
+                        puzzle_tiles = import_cut_graphics("./assets/terrain/terrain_2.png")
+                        tile_surface = puzzle_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
                         new_surface.blit(pygame.transform.scale(
                             tile_surface, (tile_size * 2, tile_size * 2)), (0, 0))
-                        sprite = Tramp(x, y, tile_size * 2, new_surface)
+                        sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
                     sprite_group.add(sprite)
 
@@ -193,7 +193,7 @@ class Level:
             player, self.tramps_sprites, False, pygame.sprite.collide_rect)  
 
         for tramp in tramps_colitions:
-            print(tramp.damage)
+           
             player.get_hurt(tramp.damage)
             # player.healthbar.max_health -= 20    
             # player.is_alive = False
@@ -204,9 +204,33 @@ class Level:
         enemy_collitions = pygame.sprite.spritecollide(
             player, self.enemys, False, pygame.sprite.collide_rect)       
 
-        for enemy in enemy_collitions:          
+        for enemy in enemy_collitions:  
+            
+          
+            
 
-            enemy.attack()    
+            enemy.attack()  
+
+    def proyectiles_collision(self):
+        player = self.player_group.sprite
+        player_group = pygame.sprite.Group(player)  # Create a temporary sprite group with the player sprite
+        for enemy in self.enemys.sprites():
+            if isinstance(enemy, FlyingEnemy):
+                projectiles = enemy.get_projectiles()
+                for projectile in projectiles:
+                    collisions = pygame.sprite.spritecollide(projectile, player_group, False, pygame.sprite.collide_rect)
+                    if collisions:
+                        player.get_hurt(projectile.damage)
+                        
+                        projectile.kill()
+
+
+   
+
+
+        
+        
+
 
    
 
@@ -227,21 +251,27 @@ class Level:
     def horizontal_movement_collision(self):
         player = self.player_group.sprite
         player.rect.x += player.direction.x * player.speed
-        # if player.rect.x >= screen_width:
+       
+        puzzle_collisions = pygame.sprite.spritecollide(
+            player, self.puzzle_sprites, False, pygame.sprite.collide_rect)
 
-        #     self.completed = True
+       
+        terrain_collisions = pygame.sprite.spritecollide(
+            player, self.terrain_sprites, False, pygame.sprite.collide_rect)
 
-        for sprite in self.terrain_sprites:
+        for sprite in puzzle_collisions + terrain_collisions:
             if sprite.rect.colliderect(player.rect):
 
                 if player.direction.x < 0:
-                    player.rect.x = player.rect.right
+                    player.rect.left = sprite.rect.right
                     player.on_left = True
                     self.current_x = player.rect.x
                 elif player.direction.x > 0:
-                    player.rect.x = player.rect.left - player.rect.width
+                    player.rect.right = sprite.rect.left
                     player.on_right = True
                     self.current_x = player.rect.x
+        if not player.on_left and not player.on_right:
+            self.current_x = player.rect.x
 
         if player.on_left and (player.rect.left < self.current_x or player.direction.x >= 0):
             player.on_left = False
@@ -274,8 +304,6 @@ class Level:
 
     def enemy_horizontal_collision(self):
         for enemy in self.enemys.sprites():
-            # enemy.rect.x += enemy.direction.x * enemy.speed
-
            
             for sprite in self.terrain_sprites:
                 if sprite.rect.colliderect(enemy.rect):
@@ -285,11 +313,7 @@ class Level:
                         enemy.rect.left = sprite.rect.right
                         
                     elif enemy.direction.x > 0:
-                        enemy.rect.right = sprite.rect.left
-
-            # if enemy.rect.y >= screen_height:
-            #     print("me muero")
-            #     self.enemys.remove(enemy)
+                        enemy.rect.right = sprite.rect.left          
 
     
 
@@ -330,31 +354,7 @@ class Level:
 
         else:
             self.move_world = 0
-            player.speed = 8
-
-    def scroll_y(self):
-        self.move_world_y = 0  
-        player = self.player_group.sprite
-
-        print(player.rect.top) 
-# 
-    
-        if player.rect.bottom >= screen_height - 80:
-            print("paso")
-            
-            self.move_world_y += player.jump_speed
-        
-
-        if player.rect.top <= (screen_height + 80) - screen_height:
-            self.move_world_y += -player.jump_speed / 2
-        # if player.rect.bottom >= screen_height - 80:
-        #     self.move_world_y -= (player.rect.bottom - (screen_height - 80)) * 0.1
-
-        # if player.rect.top <= (screen_height + 80) - screen_height:
-        #     self.move_world_y += -player.jump_speed * 0.1
-        
-        
-       
+            player.speed = 8       
        
 
 
@@ -362,7 +362,7 @@ class Level:
      
 
         self.scroll_x()
-        self.scroll_y()
+      
 
         self.background_sprites.draw(self.screen)
         self.background_sprites.update(self.move_world,  self.move_world_y )
@@ -391,6 +391,8 @@ class Level:
 
 
         self.check_arrow_collitions()
+        # self.detect_proyectiles()
+        self.proyectiles_collision()
         self.check_tramps_collisions()
 
         self.horizontal_movement_collision()

@@ -13,11 +13,11 @@
             "scaleInEditor": 1
         },
         "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/dungeon.tmx": {
-            "scale": 3,
+            "scale": 1,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 479.3333333333333,
-                "y": 483.16666666666663
+                "x": 614,
+                "y": 211.5
             }
         },
         "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/terrain.tsx": {
@@ -41,9 +41,9 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "C:/Users/Juanmaa/Desktop/MedievalGame/levels/1",
+    "last.exportedFilePath": "C:/Users/Juanmaa/Desktop/MedievalGame/levels/2",
     "last.imagePath": "C:/Users/Juanmaa/Downloads/Legacy-Dungeon_V0.2_vacaroxa (1)/Final/Assets",
-    "map.height": 45,
+    "map.height": 20,
     "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,

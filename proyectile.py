@@ -10,6 +10,7 @@ class Proyectile(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(0,0)
 
         self.gravity = 0.4
+        self.damage = 8
 
     # def import_proyectile(self):
     #     image = import_spritesheet("./assets/enemys/flyingEye/proyectile")

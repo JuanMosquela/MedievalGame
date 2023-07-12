@@ -18,6 +18,16 @@ level_map = [
         "obstacles": "./levels/1/dungeon_obstacles.csv",
         "puzzle": "./levels/1/dungeon_puzzle.csv",
 
+    },
+      {
+        "terrain": "./levels/2/dungeon_terrain.csv",
+        "characters": "./levels/2/dungeon_characters.csv",
+        "background": "./levels/2/dungeon_background.csv",
+        "decorations":  "./levels/2/dungeon_decorations.csv",
+        "tramps": "./levels/2/dungeon_tramps.csv",
+        "obstacles": "./levels/2/dungeon_obstacles.csv",
+        "puzzles": "./levels/2/dungeon_puzzles.csv",
+
     }
     ]
 

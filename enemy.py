@@ -246,7 +246,7 @@ class FlyingEnemy(Enemy):
     def import_enemy_assets(self):
         enemy_path = f"./assets/enemys/{self.type}/"
 
-        animations = { "attack": [], "run": []}
+        animations = { "attack": [], "run": [], "hit": [], "death": []}
 
 
         for animation in animations.keys():
@@ -278,6 +278,7 @@ class FlyingEnemy(Enemy):
 
 
 
+
    
 
     def update_state(self):
@@ -291,6 +292,9 @@ class FlyingEnemy(Enemy):
                 self.state = "run"
             elif self.is_attacking:
                 self.state = "attack"
+
+    def get_projectiles(self):
+        return self.proyectiles
 
 
 
