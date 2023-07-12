@@ -27,6 +27,8 @@ level_map = [
         "tramps": "./levels/2/dungeon_tramps.csv",
         "obstacles": "./levels/2/dungeon_obstacles.csv",
         "puzzles": "./levels/2/dungeon_puzzles.csv",
+        "keys": "./levels/2/dungeon_keys.csv",
+        "coins": "./levels/2/dungeon_coins.csv",
 
     }
     ]

@@ -42,6 +42,14 @@ class Level:
         #obstacles
         self.puzzle_layout = import_csv(level_map["puzzles"])
         self.puzzle_sprites = self.create_tile_group(self.puzzle_layout, "puzzles")
+
+        #keys
+        self.keys_layout = import_csv(level_map["keys"])
+        self.keys_sprites = self.create_tile_group(self.keys_layout, "keys")
+        
+        #keys
+        # self.coins_layout = import_csv(level_map["coins"])
+        # self.coins_sprites = self.create_tile_group(self.coins_layout, "coins")
         
 
 
@@ -141,6 +149,15 @@ class Level:
                             tile_surface, (tile_size * 2, tile_size * 2)), (0, 0))
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
+                    if type == "keys":
+                        keys_tiles = import_cut_graphics("./assets/terrain/terrain_2.png")
+                        tile_surface = keys_tiles[int(val)]
+                        new_surface = pygame.Surface(
+                            (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
+                        new_surface.blit(pygame.transform.scale(
+                            tile_surface, (tile_size * 2, tile_size * 2)), (0, 0))
+                        sprite = StaticTile(x, y, tile_size * 2, new_surface)
+
                     sprite_group.add(sprite)
 
         return sprite_group
@@ -195,8 +212,14 @@ class Level:
         for tramp in tramps_colitions:
            
             player.get_hurt(tramp.damage)
-            # player.healthbar.max_health -= 20    
-            # player.is_alive = False
+
+    def check_take_key(self):
+        player = self.player_group.sprite
+        for key in self.keys_sprites:
+            if pygame.sprite.collide_rect(player, key):              
+                player.has_key = True
+                key.kill()
+      
     def detect_enemy_collitions(self):
 
         player = self.player_group.sprite
@@ -204,10 +227,7 @@ class Level:
         enemy_collitions = pygame.sprite.spritecollide(
             player, self.enemys, False, pygame.sprite.collide_rect)       
 
-        for enemy in enemy_collitions:  
-            
-          
-            
+        for enemy in enemy_collitions:        
 
             enemy.attack()  
 
@@ -223,6 +243,17 @@ class Level:
                         player.get_hurt(projectile.damage)
                         
                         projectile.kill()
+
+
+    def puzzle_collision(self):
+        player = self.player_group.sprite
+
+        for puzzle in self.puzzle_sprites:
+            if pygame.sprite.collide_rect(puzzle, player) and player.has_key:          
+              
+                self.puzzle_sprites.empty()
+                player.has_key = False
+                
 
 
    
@@ -382,14 +413,18 @@ class Level:
         self.puzzle_sprites.draw(self.screen)
         self.puzzle_sprites.update(self.move_world, self.move_world_y)
 
+        self.keys_sprites.draw(self.screen)
+        self.keys_sprites.update(self.move_world, self.move_world_y)
+
 
         # for enemy in self.enemys.sprites():
         #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)
 
         self.check_obstable_collitions()
+        self.puzzle_collision()
  
 
-
+        self.check_take_key()
         self.check_arrow_collitions()
         # self.detect_proyectiles()
         self.proyectiles_collision()

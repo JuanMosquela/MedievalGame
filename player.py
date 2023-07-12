@@ -24,6 +24,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(0, 0)
         self.arrows = pygame.sprite.Group()
 
+
         self.speed = 4
         self.gravity = 0.8
         self.jump_speed = -16
@@ -37,6 +38,7 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.is_hurt = False
         self.invulnerable = False
+        self.has_key = False
         
 
         self.healthbar = HealthBar(400, 40, 100)
@@ -61,6 +63,8 @@ class Player(pygame.sprite.Sprite):
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
+
+    
 
     def move(self):
 
@@ -198,6 +202,8 @@ class Player(pygame.sprite.Sprite):
         self.arrows.update()
         self.update_state()
         self.animate()
+
+        print(self.has_key)
 
         # self.screen.blit(self.mask_image, self.rect.topleft)
        
