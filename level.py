@@ -47,9 +47,9 @@ class Level:
         self.keys_layout = import_csv(level_map["keys"])
         self.keys_sprites = self.create_tile_group(self.keys_layout, "keys")
         
-        #keys
-        # self.coins_layout = import_csv(level_map["coins"])
-        # self.coins_sprites = self.create_tile_group(self.coins_layout, "coins")
+        #coins
+        self.coins_layout = import_csv(level_map["coins"])
+        self.coins_sprites = self.create_tile_group(self.coins_layout, "coins")
         
 
 
@@ -158,6 +158,15 @@ class Level:
                             tile_surface, (tile_size * 2, tile_size * 2)), (0, 0))
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
+                    if type == "coins":
+                        coin_tiles = import_cut_graphics("./assets/terrain/terrain_2.png")
+                        tile_surface = coin_tiles[int(val)]
+                        new_surface = pygame.Surface(
+                            (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
+                        new_surface.blit(pygame.transform.scale(
+                            tile_surface, (tile_size * 2, tile_size * 2)), (0, 0))
+                        sprite = StaticTile(x, y, tile_size * 2, new_surface)
+
                     sprite_group.add(sprite)
 
         return sprite_group
@@ -253,14 +262,15 @@ class Level:
               
                 self.puzzle_sprites.empty()
                 player.has_key = False
-                
 
+    def coins_collision(self):
+        player = self.player_group.sprite
 
-   
-
-
-        
-        
+        for coin in self.coins_sprites:
+            if pygame.sprite.collide_rect(player, coin): 
+                print("colision")         
+                player.increse_points(5)
+                coin.kill()       
 
 
    
@@ -374,7 +384,7 @@ class Level:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-        if player_x >= (screen_width / 2) and direction_x > 0:
+        if player_x >= (screen_width / 2) and direction_x > 0 and self.distance < 2500:
             self.move_world = -8
             self.distance -= self.move_world
             player.speed = 0
@@ -416,6 +426,9 @@ class Level:
         self.keys_sprites.draw(self.screen)
         self.keys_sprites.update(self.move_world, self.move_world_y)
 
+        self.coins_sprites.draw(self.screen)
+        self.coins_sprites.update(self.move_world, self.move_world_y)
+
 
         # for enemy in self.enemys.sprites():
         #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)
@@ -429,6 +442,7 @@ class Level:
         # self.detect_proyectiles()
         self.proyectiles_collision()
         self.check_tramps_collisions()
+        self.coins_collision()
 
         self.horizontal_movement_collision()
         self.vertical_movement_collision()

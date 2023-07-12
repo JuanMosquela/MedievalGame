@@ -76,6 +76,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.healthbar.max_health <= 0:
             self.is_alive = False
             self.death_timer = pygame.time.get_ticks()
+            self.player.increse_points(self.reward)
 
         else:
             self.is_hurt = True

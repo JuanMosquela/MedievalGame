@@ -2,6 +2,7 @@ import pygame
 from utils.helpers import import_assets
 from arrow import Arrow
 from healthbar import HealthBar
+from settings import screen_width
 
 
 class Player(pygame.sprite.Sprite):
@@ -28,6 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.speed = 4
         self.gravity = 0.8
         self.jump_speed = -16
+        self.points = 0
 
         self.facing_right = True
         self.on_ground = False
@@ -63,6 +65,19 @@ class Player(pygame.sprite.Sprite):
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
+
+    def increse_points(self, points):
+        self.points += points
+
+    def draw_points(self):
+        font = pygame.font.SysFont("arialblack", 30)
+        text_surface = font.render(
+            f"Points {self.points} ", True, (250, 250, 250))
+        text_rect = text_surface.get_rect(
+            center=(screen_width - 100, 40))
+        self.screen.blit(text_surface, text_rect)
+
+    
 
     
 
@@ -189,6 +204,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.move()
+        self.draw_points()
         self.arrows.draw(self.screen)
         self.healthbar.draw(self.screen, (25, 75), "player")
 
@@ -197,13 +213,16 @@ class Player(pygame.sprite.Sprite):
         if current_time - self.last_hurt_time >= self.cooldown_time:
             self.invulnerable = False
 
+
+        print(self.points)
+
       
         
         self.arrows.update()
         self.update_state()
         self.animate()
 
-        print(self.has_key)
+     
 
         # self.screen.blit(self.mask_image, self.rect.topleft)
        
