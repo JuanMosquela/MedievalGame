@@ -1,5 +1,6 @@
 import pygame
 from enemy import FlyingEnemy
+from settings import *
 
 class Collisions:
     def __init__(self, enemy_group, player_group, terrains_group, puzzle_group, tramps_group, coins_group, keys_group, obstacles_group) -> None:
@@ -75,11 +76,7 @@ class Collisions:
                         enemy.rect.left = sprite.rect.right
                         
                     elif enemy.direction.x > 0:
-                        enemy.rect.right = sprite.rect.left          
-
-    
-
-                   
+                        enemy.rect.right = sprite.rect.left                   
                        
 
     def enemy_vertical_collision(self):
@@ -94,9 +91,7 @@ class Collisions:
                         enemy.rect.bottom = sprite.rect.top
                         enemy.direction.y = 0
                         enemy.on_ground = True
-                        self.collided = True  # Se produjo una colisión
-
-    
+                        self.collided = True  # Se produjo una colisión   
 
 
     def detect_enemy_collitions(self):
@@ -111,21 +106,25 @@ class Collisions:
             enemy.attack()  
 
     def check_tramps_collisions(self):
+     
         player = self.player_group.sprite
         tramps_colitions = pygame.sprite.spritecollide(
             player, self.tramps_group, False, pygame.sprite.collide_rect)  
 
         for tramp in tramps_colitions:
+            hurt.play()
            
             player.get_hurt(tramp.damage)
 
     def check_arrow_collitions(self):
+       
 
         arrows = self.player_group.sprite.arrows
         for arrow in arrows:
             collisions = pygame.sprite.spritecollide(
                 arrow, self.enemys_group, False, pygame.sprite.collide_mask)
             for enemy in collisions:
+                enemy_hurt.play()
 
                 enemy.take_damage(arrow.damage)
                 if enemy.type == "demon" and not enemy.is_alive:
@@ -134,6 +133,9 @@ class Collisions:
                 arrow.kill()
 
     def proyectiles_collision(self):
+
+       
+
         player = self.player_group.sprite
         player_group = pygame.sprite.Group(player) 
         for enemy in self.enemys_group.sprites():
@@ -142,6 +144,7 @@ class Collisions:
                 for projectile in projectiles:
                     collisions = pygame.sprite.spritecollide(projectile, player_group, False, pygame.sprite.collide_rect)
                     if collisions:
+                        hurt.play()
                         player.get_hurt(projectile.damage)
                         
                         projectile.kill()
@@ -156,10 +159,13 @@ class Collisions:
                 player.has_key = False
 
     def coins_collision(self):
+       
+        
         player = self.player_group.sprite
 
         for coin in self.coins_group:
-            if pygame.sprite.collide_rect(player, coin):                   
+            if pygame.sprite.collide_rect(player, coin):   
+                coin_sound.play()                
                 player.increse_points(5)
                 coin.kill()   
 
@@ -173,9 +179,11 @@ class Collisions:
   
 
     def check_take_key(self):
+       
         player = self.player_group.sprite
         for key in self.keys_group:
-            if pygame.sprite.collide_rect(player, key):              
+            if pygame.sprite.collide_rect(player, key): 
+                key_sound.play()             
                 player.has_key = True
                 key.kill()
           

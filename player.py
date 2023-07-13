@@ -2,7 +2,7 @@ import pygame
 from utils.helpers import import_assets
 from arrow import Arrow
 from healthbar import HealthBar
-from settings import screen_width
+from settings import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -88,11 +88,13 @@ class Player(pygame.sprite.Sprite):
 
         if self.is_alive:
             if keys[pygame.K_d]:
+               
 
                 self.direction.x = 1
                 self.facing_right = True
 
             elif keys[pygame.K_a] and self.rect.x >= 150:
+              
 
                 self.direction.x = -1
                 self.facing_right = False
@@ -111,16 +113,19 @@ class Player(pygame.sprite.Sprite):
                     self.last_action_time = current_time
 
     def jump(self):
+        jump.play()
 
         self.direction.y = self.jump_speed
 
     def shoot_arrow(self):
+        attack.play()
         self.attacking = True
         arrow = Arrow((self.rect.centerx, self.rect.centery),
                       self.facing_right)
         self.arrows.add(arrow)
 
-    def get_hurt(self, damage):           
+    def get_hurt(self, damage):
+
 
         if not self.invulnerable :
    
@@ -130,6 +135,7 @@ class Player(pygame.sprite.Sprite):
             self.last_hurt_time = pygame.time.get_ticks()
 
             if self.healthbar.max_health <= 0:
+                die.play()
                 self.is_alive = False
                 
 
@@ -151,6 +157,7 @@ class Player(pygame.sprite.Sprite):
 
                 else:
                     self.state = 'idle'
+                    
         else:
 
             self.state = "death"

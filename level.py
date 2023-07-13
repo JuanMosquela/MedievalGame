@@ -19,6 +19,7 @@ class Level:
         self.current_level = current_level
         self.completed = False
         self.level_limit = 2200
+        self.points = 0
 
         
        
@@ -180,6 +181,9 @@ class Level:
                     sprite_group.add(sprite)
 
         return sprite_group
+    
+    def update_points(self):
+        self.points = self.player_group.sprite.points
 
     def player_setup(self, layout):
 
@@ -276,17 +280,14 @@ class Level:
 
 
         # for enemy in self.enemys.sprites():
-        #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)
-
-       
-
-       
-      
+        #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)     
 
 
+        self.collisions.check()
+        self.update_points()
+        
         self.player_group.draw(self.screen)
         self.player_group.update()
 
-        self.collisions.check()
         self.enemys.draw(self.screen)
         self.enemys.update(self.move_world, self.move_world_y)

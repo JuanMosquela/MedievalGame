@@ -1,6 +1,7 @@
 import pygame
 from utils.helpers import import_spritesheet
 from healthbar import HealthBar
+from settings import *
 from proyectile import Proyectile
 
 
@@ -81,17 +82,22 @@ class Enemy(pygame.sprite.Sprite):
 
         self.healthbar.max_health -= arrow_damage
         if self.healthbar.max_health <= 0:
+            enemy_die.play()
+            
             self.is_alive = False
             self.death_timer = pygame.time.get_ticks()
             self.player.increse_points(self.reward)
 
         else:
+            enemy_hurt.play()
             self.is_hurt = True
 
 
     def attack(self):
+        
         current_time = pygame.time.get_ticks()
         if current_time - self.last_attack >= self.attack_cooldown and self.player.is_alive and self.is_alive:
+            enemy_attack.play()
             self.last_attack = current_time
             self.is_attacking = True 
             

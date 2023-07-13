@@ -1,6 +1,6 @@
-from os import listdir, walk
+import os
 from natsort import natsorted
-import pygame
+import pygame, json
 import csv
 from settings import tile_size
 
@@ -61,7 +61,7 @@ def import_assets(path):
 
     files_list = []
 
-    for __, __, images in walk(path):
+    for __, __, images in os.walk(path):
 
         sorted_images = natsorted(images)
         for image in sorted_images:
@@ -72,3 +72,19 @@ def import_assets(path):
             files_list.append(scaled_image)
 
     return files_list
+
+
+def save_game(path, data):
+    if os.path.exists(path):       
+        try:
+            with open(path, 'r') as file:
+                json_file = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):          
+            json_file = []
+    else:       
+        json_file = []
+   
+    json_file.append(data)
+   
+    with open(path, 'w') as file:
+        json.dump(json_file, file, indent=4)
