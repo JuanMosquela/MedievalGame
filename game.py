@@ -13,7 +13,8 @@ class Game:
         self.playing = True
         self.current_level = level_map[self.current_level_index]
 
-        self.level = Level(self.screen, self.current_level, self.current_level_index)
+        self.level = Level(self.screen, self.current_level,
+                           self.current_level_index)
 
         self.running = True
         self.playing = True
@@ -35,10 +36,19 @@ class Game:
                     self.playing = False
                     pygame.quit()
 
-            for i in range(3):
-                print(i)
-                
-
             self.level.run()
+
+            if self.level.completed:
+                self.current_level_index += 1
+                if self.current_level_index >= len(level_map):
+                    # Has completado todos los niveles, puedes reiniciar el juego o realizar otra acción
+                    self.current_level_index = 0
+                    # Otra acción...
+            print(self.current_level_index)
+
+            self.current_level = level_map[self.current_level_index]
+            self.level = Level(self.screen, self.current_level,
+                               self.current_level_index)
+
             pygame.display.update()
             self.clock.tick(60)
