@@ -218,7 +218,7 @@ class Level:
                     self.enemys.add(skeleton)
                 if val == "4":
 
-                    flyingEye = FlyingEnemy((x, y), "flyingEye", 150, 15, 2,  25, self.screen, self.player)
+                    flyingEye = FlyingEnemy((x, y), "flyingEye", 50, 15, 2,  25, self.screen, self.player)
                     self.enemys.add(flyingEye)  
 
    
@@ -244,7 +244,7 @@ class Level:
             player.speed = 8   
             if player.rect.x >= screen_width:
                 self.completed = True 
-                print("level comleted")   
+                
        
 
 

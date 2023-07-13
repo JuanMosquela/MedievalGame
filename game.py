@@ -131,7 +131,8 @@ class Game:
                     self.total_points += self.current_level.points
                     if self.current_level_index >= len(self.levels):
                         print("ganaste el juego")
-                        self.playing = False
+                        
+                        playing = False
                         self.state = "completed"
                         # self.current_level_index = 0
                     else:
@@ -249,8 +250,8 @@ class Game:
                 y += 30  # Incrementar la posición vertical para el siguiente
 
 
-            back_button = Button("Back", self.white, white)
-            exit_button = Button("Exit", self.white, white)
+            back_button = Button("Back", white, white)
+            exit_button = Button("Exit", white, white)
             
             button_spacing = 100
             exit_button.button_x = (screen_width - exit_button.button_width) // 2
