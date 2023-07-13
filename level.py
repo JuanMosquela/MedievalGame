@@ -6,6 +6,7 @@ from player import Player
 from enemy import *
 from settings import *
 from level_data import background_paths
+from collisions import Collisions
 
 
 class Level:
@@ -84,6 +85,8 @@ class Level:
                 background, (screen_width, screen_height))
             background_rect = background.get_rect()
             self.backgrounds.append((background, background_rect))
+
+        self.collisions = Collisions(self.enemys, self.player_group, self.terrain_sprites, self.puzzle_sprites, self.tramps_sprites, self.coins_sprites, self.keys_sprites, self.obstacles_sprites)
 
    
 
@@ -212,177 +215,9 @@ class Level:
                 if val == "4":
 
                     flyingEye = FlyingEnemy((x, y), "flyingEye", 150, 15, 2,  25, self.screen, self.player)
-                    self.enemys.add(flyingEye)
-
-
-    def check_obstable_collitions(self):
-
-        for enemy in self.enemys.sprites():
-            if pygame.sprite.spritecollide(enemy, self.obstacles_sprites, False):
-                enemy.change_direction()
-
-
-    def check_tramps_collisions(self):
-        player = self.player_group.sprite
-        tramps_colitions = pygame.sprite.spritecollide(
-            player, self.tramps_sprites, False, pygame.sprite.collide_rect)  
-
-        for tramp in tramps_colitions:
-           
-            player.get_hurt(tramp.damage)
-
-    def check_take_key(self):
-        player = self.player_group.sprite
-        for key in self.keys_sprites:
-            if pygame.sprite.collide_rect(player, key):              
-                player.has_key = True
-                key.kill()
-      
-    def detect_enemy_collitions(self):
-
-        player = self.player_group.sprite
-
-        enemy_collitions = pygame.sprite.spritecollide(
-            player, self.enemys, False, pygame.sprite.collide_rect)       
-
-        for enemy in enemy_collitions:        
-
-            enemy.attack()  
-
-    def proyectiles_collision(self):
-        player = self.player_group.sprite
-        player_group = pygame.sprite.Group(player)  # Create a temporary sprite group with the player sprite
-        for enemy in self.enemys.sprites():
-            if isinstance(enemy, FlyingEnemy):
-                projectiles = enemy.get_projectiles()
-                for projectile in projectiles:
-                    collisions = pygame.sprite.spritecollide(projectile, player_group, False, pygame.sprite.collide_rect)
-                    if collisions:
-                        player.get_hurt(projectile.damage)
-                        
-                        projectile.kill()
-
-
-    def puzzle_collision(self):
-        player = self.player_group.sprite
-
-        for puzzle in self.puzzle_sprites:
-            if pygame.sprite.collide_rect(puzzle, player) and player.has_key:          
-              
-                self.puzzle_sprites.empty()
-                player.has_key = False
-
-    def coins_collision(self):
-        player = self.player_group.sprite
-
-        for coin in self.coins_sprites:
-            if pygame.sprite.collide_rect(player, coin):                   
-                player.increse_points(5)
-                coin.kill()       
-
+                    self.enemys.add(flyingEye)  
 
    
-
-    def check_arrow_collitions(self):
-
-        arrows = self.player_group.sprite.arrows
-        for arrow in arrows:
-            collisions = pygame.sprite.spritecollide(
-                arrow, self.enemys, False, pygame.sprite.collide_mask)
-            for enemy in collisions:
-
-                enemy.take_damage(arrow.damage)
-                if enemy.type == "demon" and not enemy.is_alive:
-                    print("muere el boss")
-                    self.completed = True
-                arrow.kill()
-
-    def horizontal_movement_collision(self):
-        player = self.player_group.sprite
-        player.rect.x += player.direction.x * player.speed
-       
-        puzzle_collisions = pygame.sprite.spritecollide(
-            player, self.puzzle_sprites, False, pygame.sprite.collide_rect)
-
-       
-        terrain_collisions = pygame.sprite.spritecollide(
-            player, self.terrain_sprites, False, pygame.sprite.collide_rect)
-
-        for sprite in puzzle_collisions + terrain_collisions:
-            if sprite.rect.colliderect(player.rect):
-
-                if player.direction.x < 0:
-                    player.rect.left = sprite.rect.right
-                    player.on_left = True
-                    self.current_x = player.rect.x
-                elif player.direction.x > 0:
-                    player.rect.right = sprite.rect.left
-                    player.on_right = True
-                    self.current_x = player.rect.x
-        if not player.on_left and not player.on_right:
-            self.current_x = player.rect.x
-
-        if player.on_left and (player.rect.left < self.current_x or player.direction.x >= 0):
-            player.on_left = False
-        if player.on_right and (player.rect.right > self.current_x or player.direction.x <= 0):
-            player.on_right = False
-
-    def vertical_movement_collision(self):
-        player = self.player_group.sprite
-        player.apply_gravity()
-
-        for sprite in self.terrain_sprites.sprites():
-            if sprite.rect.colliderect(player.rect):
-
-                if player.direction.y > 0:
-                    player.rect.bottom = sprite.rect.top
-                    player.direction.y = 0
-                    player.on_ground = True
-                elif player.direction.y < 0:
-                    player.rect.top = sprite.rect.bottom
-                    player.direction.y = 0
-                    player.on_ceiling = True
-
-        if player.on_ground and player.direction.y < 0 or player.direction.y > 1:
-            player.on_ground = False
-        if player.on_ceiling and player.direction.y > 0.1:
-            player.on_ceiling = False
-
-
-        
-
-    def enemy_horizontal_collision(self):
-        for enemy in self.enemys.sprites():
-           
-            for sprite in self.terrain_sprites:
-                if sprite.rect.colliderect(enemy.rect):
-                    
-                
-                    if enemy.direction.x < 0:
-                        enemy.rect.left = sprite.rect.right
-                        
-                    elif enemy.direction.x > 0:
-                        enemy.rect.right = sprite.rect.left          
-
-    
-
-                   
-                       
-
-    def enemy_vertical_collision(self):
-        for enemy in self.enemys.sprites():
-            # if enemy.type != "flyingEye":
-            
-            enemy.apply_gravity()             
-
-            for sprite in self.terrain_sprites.sprites():
-                if sprite.rect.colliderect(enemy.rect):
-                    # Si el enemigo está cayendo y hay una plataforma debajo
-                    if enemy.direction.y > 0:
-                        enemy.rect.bottom = sprite.rect.top
-                        enemy.direction.y = 0
-                        enemy.on_ground = True
-                        self.collided = True  # Se produjo una colisión
 
            
 
@@ -409,8 +244,7 @@ class Level:
        
 
 
-    def run(self):
-       
+    def run(self):       
      
         self.draw_background()
         self.scroll_x()
@@ -444,26 +278,15 @@ class Level:
         # for enemy in self.enemys.sprites():
         #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)
 
-        self.check_obstable_collitions()
-        self.puzzle_collision()
- 
+       
 
-        self.check_take_key()
-        self.check_arrow_collitions()
-        
-        self.proyectiles_collision()
-        self.check_tramps_collisions()
-        self.coins_collision()
-
-        self.horizontal_movement_collision()
-        self.vertical_movement_collision()
-
-        self.enemy_horizontal_collision()
-        self.enemy_vertical_collision()
+       
+      
 
 
         self.player_group.draw(self.screen)
         self.player_group.update()
 
+        self.collisions.check()
         self.enemys.draw(self.screen)
         self.enemys.update(self.move_world, self.move_world_y)
