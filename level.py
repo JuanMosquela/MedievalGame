@@ -18,6 +18,8 @@ class Level:
         self.current_level = current_level
         self.completed = False
         self.level_limit = 2200
+
+        
        
 
         # terrain
@@ -82,6 +84,8 @@ class Level:
                 background, (screen_width, screen_height))
             background_rect = background.get_rect()
             self.backgrounds.append((background, background_rect))
+
+   
 
     def draw_background(self):
         for background, background_rect in self.backgrounds:
@@ -391,7 +395,7 @@ class Level:
             self.move_world = -8
             self.distance -= self.move_world
             player.speed = 0
-        elif player_x <= screen_width / 2 and direction_x < 0:
+        elif player_x <= screen_width / 2 and direction_x < 0 and self.distance > 0:
             self.move_world = 8
             self.distance -= self.move_world
             player.speed = 0
@@ -406,6 +410,7 @@ class Level:
 
 
     def run(self):
+       
      
         self.draw_background()
         self.scroll_x()

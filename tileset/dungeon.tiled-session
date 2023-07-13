@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/dungeon.tmx",
+    "activeFile": "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/untitled.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -48,7 +48,8 @@
             }
         },
         "C:/Users/Juanmaa/Desktop/MedievalGame/tiles/terrain.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 1
         },
         "C:/Users/Juanmaa/Desktop/characters.tsx": {
             "dynamicWrapping": true,
@@ -66,13 +67,23 @@
             "dynamicWrapping": true,
             "scaleInDock": 1
         },
+        "C:/Users/Juanmaa/Downloads/cementery.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 209,
+                "y": 121.66666666666666
+            }
+        },
         "C:/Users/Juanmaa/Downloads/characters.tsx": {
             "dynamicWrapping": true,
             "scaleInDock": 0.5,
             "scaleInEditor": 1
         },
         "C:/Users/Juanmaa/Downloads/terrain.tsx": {
-            "dynamicWrapping": false
+            "dynamicWrapping": false,
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
         },
         "terrain.tsx": {
             "dynamicWrapping": false,
@@ -89,21 +100,27 @@
     "map.tileWidth": 16,
     "map.width": 100,
     "openFiles": [
-        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/dungeon.tmx",
-        "terrain.tsx",
-        "C:/Users/Juanmaa/Downloads/characters.tsx",
         "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/characters.tsx",
         "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/terrain_2.tsx",
-        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/dungeon.tmx"
+        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/dungeon.tmx",
+        "C:/Users/Juanmaa/Desktop/dungeon_2.tmx",
+        "C:/Users/Juanmaa/Desktop/MedievalGame/tiles/forest.tmx",
+        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/untitled.tmx",
+        "C:/Users/Juanmaa/Downloads/cementery.tmx",
+        "C:/Users/Juanmaa/Downloads/terrain.tsx"
     ],
     "project": "dungeon.tiled-project",
     "recentFiles": [
-        "C:/Users/Juanmaa/Downloads/characters.tsx",
-        "terrain.tsx",
+        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/characters.tsx",
+        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/terrain_2.tsx",
         "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/dungeon.tmx",
         "C:/Users/Juanmaa/Desktop/dungeon_2.tmx",
-        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/terrain_2.tsx",
-        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/characters.tsx",
+        "C:/Users/Juanmaa/Desktop/MedievalGame/tiles/forest.tmx",
+        "C:/Users/Juanmaa/Downloads/terrain.tsx",
+        "C:/Users/Juanmaa/Downloads/cementery.tmx",
+        "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/untitled.tmx",
+        "C:/Users/Juanmaa/Downloads/characters.tsx",
+        "terrain.tsx",
         "C:/Users/Juanmaa/Desktop/MedievalGame/assets/terrain/terrain.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
