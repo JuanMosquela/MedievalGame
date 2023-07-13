@@ -29,7 +29,7 @@ class Game:
         self.levels = []
 
         for level_index, level_data in enumerate(level_map): 
-            print(level_data, level_index) 
+           
     
             level = Level(self.screen, level_data, level_index)
             self.levels.append(level)
