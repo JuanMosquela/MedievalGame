@@ -8,8 +8,9 @@ class TextInput:
         self.text = ""
         self.font = pygame.font.SysFont("white", 50)
         self.max_length = max_length
+        self.min_characters = 4
         self.done = False
-        self.accept_button = Button("Accept", "white", "white")
+        self.accept_button = Button("Accept", (255,255,255), (255,255,255))
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -20,11 +21,12 @@ class TextInput:
                     self.text += event.unicode
 
     def check_button_click(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.done:
-                return  # Si ya se ha presionado el botón "Accept", no realizar ninguna acción adicional
 
-            if self.accept_button.rect.collidepoint(event.pos):
+
+        if event.type == pygame.MOUSEBUTTONDOWN:           
+            
+
+            if self.accept_button.rect.collidepoint(event.pos[0] - self.accept_button.button_x, event.pos[1] - self.accept_button.button_y ) and len(self.text) >= self.min_characters:
                 self.done = True
                 # Realiza la acción deseada cuando se presiona el botón "Accept"
                 # Por ejemplo, puedes imprimir el texto ingresado por el usuario

@@ -29,7 +29,7 @@ class Game:
         self.pause_game = False
         self.level_points = 0
         self.total_points = 0
-        self.state = "form"
+        self.state = "menu"
 
         self.font = pygame.font.SysFont("arialblack", 50)
 
@@ -78,7 +78,7 @@ class Game:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if play_button.rect.collidepoint(event.pos[0] - play_button.button_x, event.pos[1] - play_button.button_y):
                         menu_running = False
-                        self.state = "playing"
+                        self.state = "form"
 
             pygame.display.update()
             self.clock.tick(60)
@@ -94,7 +94,7 @@ class Game:
         form = TextInput(((screen_width / 2) - (width / 2)),
                          screen_height / 4, width, height, 25)
 
-        while True:
+        while self.state == "form":
             form.draw(self.screen)
             for event in pygame.event.get():
 
@@ -104,9 +104,11 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     self.running = False
+                
 
             if form.done:
                 self.username = form.text
+                self.state = "playing"
 
             pygame.display.update()
             self.clock.tick(60)
@@ -316,27 +318,4 @@ class Game:
         button.draw(self.screen)
 
 
-# #
-#     def game_loop(self):
 
-#         while self.playing:
-#             for event in pygame.event.get():
-#                 if event.type == pygame.QUIT:
-
-#                     self.running = False
-#                     self.playing = False
-#                     pygame.quit()
-
-
-#             self.current_level.run()
-
-#             if self.current_level.completed:
-
-#                 self.current_level_index += 1
-#                 if self.current_level_index >= len(self.levels):
-#                     print("ganaste el juego")
-#                     self.current_level_index = 0
-#                 self.current_level = self.levels[self.current_level_index]
-
-#             pygame.display.update()
-#             self.clock.tick(60)
