@@ -44,8 +44,8 @@ class Game:
 
     def display_menu(self):
         menu.play(-1)
-        menu_running = True
-        while menu_running:
+       
+        while self.state == "menu":
             self.screen.fill((0, 0, 0))
             play_button = Button("Play", white, white)
             options_button = Button("Options", white, white)
@@ -72,18 +72,20 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
-                    menu_running = False
+                    self.running = False              
+                   
 
-                elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN:
                     if play_button.rect.collidepoint(event.pos[0] - play_button.button_x, event.pos[1] - play_button.button_y):
-                        menu_running = False
+                      
                         self.state = "form"
 
             pygame.display.update()
             self.clock.tick(60)
 
     def display_form(self):
+        game.play(-1)
+
         self.screen.fill((0, 0, 0))
         width = 300
         height = 50
@@ -133,18 +135,17 @@ class Game:
             self.display_form()
 
     def game_loop(self):
-        game.play(-1)
-
-        playing = True
-        while playing:
+     
+       
+        while self.state == "playing":
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    playing = False
+                if event.type == pygame.QUIT:                   
                     self.running = False
+                    sys.exit()
 
-                elif event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        playing = False
+                       
                         self.state = "menu"
                     if event.key == pygame.K_p:
                         self.pause_game = not self.pause_game
@@ -157,12 +158,11 @@ class Game:
 
                     self.current_level_index += 1
                     self.total_points += self.current_level.points
-                    if self.current_level_index >= len(self.levels):
-                        print("ganaste el juego")
+                    if self.current_level_index >= len(self.levels):                        
 
                         playing = False
                         self.state = "completed"
-                        # self.current_level_index = 0
+                       
                     else:
                         self.current_level = self.levels[self.current_level_index]
             else:
@@ -185,8 +185,8 @@ class Game:
         pygame.display.update()
 
     def display_game_completed_screen(self):
-        completed = True
-        while completed:
+        
+        while self.state == "completed":
             self.current_level_index = 0
 
             self.screen.fill((0, 0, 0))
@@ -231,15 +231,15 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN:
                     if restart_button.rect.collidepoint(event.pos[0] - restart_button.button_x, event.pos[1] - restart_button.button_y):
-                        completed = False
+
                         self.state = "playing"
                     if ranking_button.rect.collidepoint(event.pos[0] - ranking_button.button_x, event.pos[1] - ranking_button.button_y):
-                        completed = False
+                       
                         self.state = "ranking"
                     if save_button.rect.collidepoint(event.pos[0] - save_button.button_x, event.pos[1] - save_button.button_y):
-                        completed = False
+                       
                         game_stats = {
                             "username": self.username,
                             "points": self.total_points
