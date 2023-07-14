@@ -4,8 +4,8 @@ from settings import *
 
 class Button:
     def __init__(self, text, color, border_color) -> None:
-        self.color = color
-        self.font = pygame.font.SysFont("arialblack", 50)
+
+        self.font = pygame.font.SysFont(color, 50)
         self.border_color = border_color
         self.text = text
         self.text_surface = self.font.render(

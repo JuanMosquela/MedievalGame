@@ -14,5 +14,9 @@
     {
         "username": "test",
         "points": 180
+    },
+    {
+        "username": "test",
+        "points": 275
     }
 ]
