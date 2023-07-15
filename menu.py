@@ -2,6 +2,7 @@ import pygame, sys, json
 from button import Button
 from settings import *
 from utils.helpers import save_game
+from tabulate import tabulate
 
 
 class Menu:
@@ -67,7 +68,7 @@ class MenuFinal(Menu):
         mouse_pos = pygame.mouse.get_pos()
 
         if self.buttons[0].check_clicked(mouse_pos):
-            return "playing"
+            return "restart"
         if self.buttons[1].check_clicked(mouse_pos):
             return "ranking"
         if self.buttons[2].check_clicked(mouse_pos):
@@ -99,6 +100,26 @@ class RankingMenu(Menu):
             return "completed"
         if self.buttons[1].check_clicked(mouse_pos):
             self.exit()
+
+    def draw_scores(self, screen):
+
+        self.load_scores()
+
+        table_data = [[score['username'], score['score']] for score in self.scores]
+        table_headers = ['Nombre', 'Puntaje']
+
+        table = tabulate(table_data, headers=table_headers, tablefmt='plain')
+
+        font = pygame.font.Font(None, 36)
+        scores_lines = table.split('\n')
+        y = (screen_height // 2) - (len(scores_lines) * 20 // 2)
+
+        for line in scores_lines:
+            score_message = font.render(line, True, white)
+            score_rect = score_message.get_rect(center=(screen_width // 2, y))
+            screen.blit(score_message, score_rect)
+            y += 40 
+            
 
 
 class GameOver(Menu):

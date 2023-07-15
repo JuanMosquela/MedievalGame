@@ -24,5 +24,9 @@ class Button:
             return False
 
     def draw(self, screen):
+        if self.text == "back":
+            self.rect.x = 100
+            self.rect.y = 100
+
 
         screen.blit(self.text_surface, (self.rect.x, self.rect.y))

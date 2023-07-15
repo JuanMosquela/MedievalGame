@@ -30,7 +30,7 @@ class Game:
         self.state = "completed"
         self.username = ""
 
-        self.font = pygame.font.SysFont("arialblack", 50)
+        self.font = pygame.font.SysFont("Arial", 50)
 
         self.levels = []
 
@@ -62,6 +62,11 @@ class Game:
 
         if self.state == "gameover":
             self.game_over()
+        if self.state == "restart":
+            self.restart_game()
+        if self.state == "save":
+            save_game("./data/ranking.json", { "username": self.username, "score": self.total_points })
+            self.state = "ranking"
 
        
 
@@ -109,11 +114,7 @@ class Game:
             for event in pygame.event.get():
 
                 form.handle_event(event)
-                form.check_button_click(event)
-
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    self.running = False
+                form.check_button_click(event)                
 
             if form.done:
                 self.username = form.text
@@ -187,12 +188,11 @@ class Game:
             self.screen.fill((0, 0, 0))
 
             message = self.font.render(
-                "¡Congratulations! You won the game.", True, white)
+                "You won the game.", True, white)
             message_rect = message.get_rect(
                 center=(screen_width // 2, screen_height // 2 - 200))
 
             self.screen.blit(message, message_rect)
-
 
             final_menu.draw(self.screen)            
 
@@ -209,15 +209,16 @@ class Game:
 
             self.screen.fill((0, 0, 0))
 
-            font = pygame.font.Font(None, 36)
-            score_message = font.render(
-                f"Your score: {self.total_points}", True, white)
-            score_rect = score_message.get_rect(
-                center=(screen_width // 2, screen_height // 2))
-            self.screen.blit(score_message, score_rect)
+            # font = pygame.font.Font(None, 36)
+            # score_message = font.render(
+            #     f"Your score: {self.total_points}", True, white)
+            # score_rect = score_message.get_rect(
+            #     center=(screen_width // 2, screen_height // 2))
+            # self.screen.blit(score_message, score_rect)
 
             ranking.draw(self.screen)           
-            ranking.load_scores()
+           
+            ranking.draw_scores(self.screen)
           
             state = ranking.update()
             if state != None:

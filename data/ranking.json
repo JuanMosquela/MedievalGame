@@ -1,6 +1,10 @@
 [
     {
-        "username": "juan",
-        "points": 180
+        "username": "mati",
+        "score": 140
+    },
+    {
+        "username": "juanma",
+        "score": 150
     }
 ]
