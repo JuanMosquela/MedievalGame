@@ -207,6 +207,9 @@ class Player(pygame.sprite.Sprite):
         elif self.on_ceiling:
             self.rect = self.image.get_rect(midtop=self.rect.midtop)
 
+    def get_health(self):
+        return self.healthbar.max_health
+
     def update(self):
         self.move()
         self.draw_points()
@@ -216,7 +219,9 @@ class Player(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
 
         if current_time - self.last_hurt_time >= self.cooldown_time:
-            self.invulnerable = False  
+            self.invulnerable = False 
+
+       
 
       
         

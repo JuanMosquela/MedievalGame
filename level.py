@@ -20,6 +20,7 @@ class Level:
         self.completed = False
         self.level_limit = 2200
         self.points = 0
+        self.game_over = False
 
         
        
@@ -244,13 +245,24 @@ class Level:
             player.speed = 8   
             if player.rect.x >= screen_width:
                 self.completed = True 
+
+    def check_player_health(self):
+        player = self.player_group.sprite
+        health = player.get_health()
+   
+        if health <= 0:
+            self.game_over = True
+        
                 
        
 
 
-    def run(self):       
+    def run(self):    
+
+           
      
         self.draw_background()
+        self.check_player_health()
         self.scroll_x()
       
 

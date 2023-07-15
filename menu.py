@@ -1,5 +1,4 @@
-import pygame
-import sys
+import pygame, sys, json
 from button import Button
 from settings import *
 from utils.helpers import save_game
@@ -27,6 +26,10 @@ class Menu:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 return self.handle_button()
+            
+    def exit(self):
+        pygame.quit()
+        sys.exit()
 
 
 class MainMenu(Menu):
@@ -45,8 +48,7 @@ class MainMenu(Menu):
         if self.buttons[0].check_clicked(mouse_pos):
             return "form"
         if self.buttons[2].check_clicked(mouse_pos):
-            pygame.quit()
-            sys.exit()
+            self.exit()
 
 
 class MenuFinal(Menu):
@@ -71,7 +73,48 @@ class MenuFinal(Menu):
         if self.buttons[2].check_clicked(mouse_pos):
             return "save"
         if self.buttons[3].check_clicked(mouse_pos):
-            pygame.quit()
-            sys.exit()
+            self.exit()
+
+
+class RankingMenu(Menu):
+    def __init__(self) -> None:
+        super().__init__()
+        self.buttons = [
+            Button("back", white, white),
+            Button("exit", white,white, 50)
+        ]
+        self.scores = []
+
+
+    def load_scores(self):
+        try:
+            with open("./data/ranking.json", "r") as file:
+                    self.scores = json.load(file)
+        except (FileNotFoundError, json.JSONDecodeError):
+                self.scores = []
+
+    def handle_button(self):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.buttons[0].check_clicked(mouse_pos):
+            return "completed"
+        if self.buttons[1].check_clicked(mouse_pos):
+            self.exit()
+
+
+class GameOver(Menu):
+    def __init__(self) -> None:
+        super().__init__()
+        self.buttons = [
+            Button("restart", white, white),
+            Button("exit", white, white, 50)            
+        ]
+
+
+    def handle_button(self):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.buttons[0].check_clicked(mouse_pos):
+            return "restart"
+        if self.buttons[1].check_clicked(mouse_pos):
+            self.exit()
 
     
