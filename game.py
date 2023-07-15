@@ -7,6 +7,7 @@ from level_data import level_map
 from button import Button
 from utils.helpers import save_game
 from form import TextInput
+from menu import MainMenu
 
 
 class Game:
@@ -44,41 +45,46 @@ class Game:
 
     def display_menu(self):
         menu.play(-1)
-       
+        main_menu = MainMenu()
+
         while self.state == "menu":
             self.screen.fill((0, 0, 0))
-            play_button = Button("Play", white, white)
-            options_button = Button("Options", white, white)
-            exit_button = Button("Exit", white, white)
+            main_menu.draw(self.screen)
+            state = main_menu.update()
+            if state != None:
+                self.state = state
 
-            button_spacing = 100
-            play_button.button_x = (
-                screen_width - play_button.button_width) // 2
-            play_button.button_y = (
-                screen_height - play_button.button_height) // 2 - button_spacing
-            options_button.button_x = (
-                screen_width - options_button.button_width) // 2
-            options_button.button_y = (
-                screen_height - options_button.button_height) // 2
-            exit_button.button_x = (
-                screen_width - exit_button.button_width) // 2
-            exit_button.button_y = (
-                screen_height - exit_button.button_height) // 2 + button_spacing
+            # play_button = Button("Play", white, white)
+            # options_button = Button("Options", white, white)
+            # exit_button = Button("Exit", white, white)
+
+            # button_spacing = 100
+            # play_button.button_x = (
+            #     screen_width - play_button.button_width) // 2
+            # play_button.button_y = (
+            #     screen_height - play_button.button_height) // 2 - button_spacing
+            # options_button.button_x = (
+            #     screen_width - options_button.button_width) // 2
+            # options_button.button_y = (
+            #     screen_height - options_button.button_height) // 2
+            # exit_button.button_x = (
+            #     screen_width - exit_button.button_width) // 2
+            # exit_button.button_y = (
+            #     screen_height - exit_button.button_height) // 2 + button_spacing
 
             # Dibujar los botones en la pantalla
-            play_button.draw(self.screen)
-            options_button.draw(self.screen)
-            exit_button.draw(self.screen)
+            # play_button.draw(self.screen)
+            # options_button.draw(self.screen)
+            # exit_button.draw(self.screen)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False              
-                   
+            # for event in pygame.event.get():
+            #     if event.type == pygame.QUIT:
+            #         self.running = False
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if play_button.rect.collidepoint(event.pos[0] - play_button.button_x, event.pos[1] - play_button.button_y):
-                      
-                        self.state = "form"
+            #     if event.type == pygame.MOUSEBUTTONDOWN:
+            #         if play_button.rect.collidepoint(event.pos[0] - play_button.button_x, event.pos[1] - play_button.button_y):
+
+            #             self.state = "form"
 
             pygame.display.update()
             self.clock.tick(60)
@@ -106,7 +112,6 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     self.running = False
-                
 
             if form.done:
                 self.username = form.text
@@ -135,17 +140,16 @@ class Game:
             self.display_form()
 
     def game_loop(self):
-     
-       
+
         while self.state == "playing":
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:                   
+                if event.type == pygame.QUIT:
                     self.running = False
                     sys.exit()
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                       
+
                         self.state = "menu"
                     if event.key == pygame.K_p:
                         self.pause_game = not self.pause_game
@@ -158,11 +162,11 @@ class Game:
 
                     self.current_level_index += 1
                     self.total_points += self.current_level.points
-                    if self.current_level_index >= len(self.levels):                        
+                    if self.current_level_index >= len(self.levels):
 
                         playing = False
                         self.state = "completed"
-                       
+
                     else:
                         self.current_level = self.levels[self.current_level_index]
             else:
@@ -185,7 +189,7 @@ class Game:
         pygame.display.update()
 
     def display_game_completed_screen(self):
-        
+
         while self.state == "completed":
             self.current_level_index = 0
 
@@ -236,10 +240,10 @@ class Game:
 
                         self.state = "playing"
                     if ranking_button.rect.collidepoint(event.pos[0] - ranking_button.button_x, event.pos[1] - ranking_button.button_y):
-                       
+
                         self.state = "ranking"
                     if save_button.rect.collidepoint(event.pos[0] - save_button.button_x, event.pos[1] - save_button.button_y):
-                       
+
                         game_stats = {
                             "username": self.username,
                             "points": self.total_points
@@ -316,6 +320,3 @@ class Game:
         button = Button("Press R to restart",
                         (250, 250, 250), (250, 250, 250))
         button.draw(self.screen)
-
-
-
