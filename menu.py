@@ -2,6 +2,7 @@ import pygame
 import sys
 from button import Button
 from settings import *
+from utils.helpers import save_game
 
 
 class Menu:
@@ -42,7 +43,35 @@ class MainMenu(Menu):
         mouse_pos = pygame.mouse.get_pos()
 
         if self.buttons[0].check_clicked(mouse_pos):
-            return "playing"
+            return "form"
         if self.buttons[2].check_clicked(mouse_pos):
             pygame.quit()
             sys.exit()
+
+
+class MenuFinal(Menu):
+    def __init__(self) -> None:
+        super().__init__()
+
+        self.buttons = [
+            Button("play again", white, white),
+            Button("ranking", white, white, 50),
+            Button("save", white, white, 100),
+            Button("exit", white, white , 150)
+        ]
+
+    
+    def handle_button(self):
+        mouse_pos = pygame.mouse.get_pos()
+
+        if self.buttons[0].check_clicked(mouse_pos):
+            return "playing"
+        if self.buttons[1].check_clicked(mouse_pos):
+            return "ranking"
+        if self.buttons[2].check_clicked(mouse_pos):
+            return "save"
+        if self.buttons[3].check_clicked(mouse_pos):
+            pygame.quit()
+            sys.exit()
+
+    

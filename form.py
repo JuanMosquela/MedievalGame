@@ -1,5 +1,6 @@
 import pygame
 from button import Button
+from settings import *
 
 
 class TextInput:
@@ -21,18 +22,20 @@ class TextInput:
                     self.text += event.unicode
 
     def check_button_click(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:     
+            mouse_pos = pygame.mouse.get_pos()       
 
-
-        if event.type == pygame.MOUSEBUTTONDOWN:           
-            
-
-            if self.accept_button.rect.collidepoint(event.pos[0] - self.accept_button.button_x, event.pos[1] - self.accept_button.button_y ) and len(self.text) >= self.min_characters:
-                self.done = True
-                # Realiza la acción deseada cuando se presiona el botón "Accept"
-                # Por ejemplo, puedes imprimir el texto ingresado por el usuario
+            if self.accept_button.rect.collidepoint(mouse_pos ) and len(self.text) >= self.min_characters:
+                self.done = True               
                 print("Texto ingresado:", self.text)
 
-    def draw(self, screen):
+    def draw(self, screen, width, height):
+        header = self.font.render("Ingresa tu nombre", True, (255, 255, 255))
+        header_rect = pygame.Rect(
+            width, height, ((screen_width / 2) - (width / 2)), screen_height / 4)
+        
+        screen.blit(header, header_rect)
+
         pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
 
         rendered_text = self.font.render(self.text, True, (255, 255, 255))
