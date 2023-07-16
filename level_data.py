@@ -24,7 +24,19 @@ level_map = [
         "keys": "./levels/1/dungeon_keys.csv",
         "coins": "./levels/1/dungeon_coins.csv",
 
-    }
+    },
+    {
+        "terrain": "./levels/2/final_terrain.csv",
+        "characters": "./levels/2/final_characters.csv",
+        "background": "./levels/2/final_background.csv",
+        "decorations":  "./levels/2/final_decorations.csv",
+        "tramps": "./levels/2/final_tramps.csv",
+        "obstacles": "./levels/2/final_obstacles.csv",
+        "coins": "./levels/2/final_coins.csv",
+        "puzzles": "./levels/2/final_puzzles.csv",
+        "keys": "./levels/2/final_keys.csv"
+
+    },
     ]
 
 background_paths = [

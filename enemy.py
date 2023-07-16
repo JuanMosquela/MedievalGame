@@ -1,5 +1,5 @@
 import pygame
-from utils.helpers import import_spritesheet
+from utils.helpers import import_spritesheet, import_assets
 from healthbar import HealthBar
 from settings import *
 from proyectile import Proyectile
@@ -97,7 +97,8 @@ class Enemy(pygame.sprite.Sprite):
         
         current_time = pygame.time.get_ticks()
         if current_time - self.last_attack >= self.attack_cooldown and self.player.is_alive and self.is_alive:
-            enemy_attack.play()
+            
+            self.current_frame = 0
             self.last_attack = current_time
             self.is_attacking = True 
             
@@ -131,12 +132,16 @@ class Enemy(pygame.sprite.Sprite):
             self.state = "run"
 
         if self.is_attacking :
-            if int(self.current_frame) == 7:              
+            if int(self.current_frame) == 7:  
+                  
+                       
 
                 if pygame.sprite.collide_rect(self.player, self):
                    
+                   
                     self.player.get_hurt(self.damage)
-            if is_last_frame:                 
+            if is_last_frame:     
+                        
                 self.is_attacking = False
                 self.state = "run"            
 
@@ -170,6 +175,7 @@ class NormalEnemy(Enemy):
         super().__init__(pos, type, health, damage, speed, reward, screen, player)
         
         self.state = "idle"
+        print(self.current_frame)
         self.image = self.animations[self.state][self.current_frame]
         self.rect = self.image.get_rect(center=self.pos)
         self.mask = pygame.mask.from_surface(self.image)
@@ -324,3 +330,38 @@ class FlyingEnemy(Enemy):
         self.healthbar.draw(self.screen, (self.rect.centerx, self.rect.top), "enemy")
 
         self.animation()
+
+
+class Boss(NormalEnemy):
+    def __init__(self, pos, type, health, damage, speed, reward, screen, player) -> None:
+        super().__init__(pos, type, health, damage, speed, reward, screen, player)
+
+    def flip_images(self, image_list):
+        flipped_images = []
+        for image in image_list:
+            flipped_image = pygame.transform.flip(image, True, False)
+            # image = flipped_image.subsurface(pygame.Rect(85, 40, 126, 119))
+            flipped_images.append(flipped_image)
+        return flipped_images
+    
+       
+
+    def import_enemy_assets(self):
+        animations = {"idle": [], "run": [], "attack": [], "hit": [], "death": []}
+        path = "./assets/enemys/boss/"
+
+        for action in animations.keys():
+            full_path = path + action
+
+
+            image_list = import_assets(full_path)
+            animations[action] = self.flip_images(image_list)
+        
+
+            # animations[action] = import_assets(full_path)
+
+        return animations  
+
+
+
+    

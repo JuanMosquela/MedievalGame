@@ -128,6 +128,7 @@ class Player(pygame.sprite.Sprite):
 
 
         if not self.invulnerable :
+            enemy_attack.play()       
    
             self.invulnerable = True
             self.is_hurt = True
@@ -219,9 +220,7 @@ class Player(pygame.sprite.Sprite):
         current_time = pygame.time.get_ticks()
 
         if current_time - self.last_hurt_time >= self.cooldown_time:
-            self.invulnerable = False 
-
-       
+            self.invulnerable = False   
 
       
         

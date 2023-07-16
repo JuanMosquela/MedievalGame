@@ -221,6 +221,11 @@ class Level:
 
                     flyingEye = FlyingEnemy((x, y), "flyingEye", 50, 15, 2,  25, self.screen, self.player)
                     self.enemys.add(flyingEye)  
+                
+                if val == "5":
+
+                    boss = Boss((x, y), "boss", 500, 15, 1,  25, self.screen, self.player)
+                    self.enemys.add(boss)  
 
    
 
@@ -291,8 +296,8 @@ class Level:
         self.coins_sprites.update(self.move_world, self.move_world_y)
 
 
-        # for enemy in self.enemys.sprites():
-        #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)     
+        for enemy in self.enemys.sprites():
+            pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)     
 
 
         self.collisions.check()

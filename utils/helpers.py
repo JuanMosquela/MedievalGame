@@ -59,6 +59,8 @@ def import_spritesheet(path):
 
 def import_assets(path):
 
+  
+
     files_list = []
 
     for __, __, images in os.walk(path):
