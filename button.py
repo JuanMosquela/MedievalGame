@@ -42,10 +42,20 @@ class Button:
     def draw(self, screen):
 
         self.get_hover()
+        self.change_color()
        
         if self.text == "back":
             self.rect.x = 100
             self.rect.y = 100
         
+        border_rect = pygame.Rect(
+            self.rect.x - 2, self.rect.y - 2, self.rect.width + 4, self.rect.height + 4
+        )
+        pygame.draw.rect(screen, self.border_color, border_rect)
         pygame.draw.rect(screen, self.color, self.rect)
+
+
         screen.blit(self.text_surface, (self.rect.x, self.rect.y))
+
+
+

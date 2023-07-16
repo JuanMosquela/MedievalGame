@@ -7,11 +7,18 @@ from tabulate import tabulate
 
 class Menu:
     def __init__(self) -> None:
-
+        self.header = ""
+       
         self.buttons = []
+        self.font = pygame.font.SysFont("Arial", 50)
 
-    def draw(self, screen):
-        mouse_pos = pygame.mouse.get_pos()
+
+    def draw(self, screen):      
+
+        header = self.font.render(self.header, True, (255, 255, 255))
+        header_rect = pygame.Rect(
+        ((screen_width / 2) - (200 / 2)) , screen_height / 4, 200, 80)
+        screen.blit(header, header_rect)
 
         for button in self.buttons:
             button.draw(screen)
@@ -37,10 +44,12 @@ class MainMenu(Menu):
     def __init__(self) -> None:
         super().__init__()
 
+        self.header = "Main Menu"
+
         self.buttons = [
-            Button("play", white, white),
-            Button("options", white, white, 50),
-            Button("exit", white, white, 100)
+            Button("play", black, white),
+            Button("options", black, white, 80),
+            Button("exit", black, white, 160)
         ]
 
     def handle_button(self):
@@ -82,7 +91,7 @@ class RankingMenu(Menu):
         super().__init__()
         self.buttons = [
             Button("back", white, white),
-            Button("exit", white,white, 50)
+            
         ]
         self.scores = []
 
@@ -114,12 +123,16 @@ class RankingMenu(Menu):
         scores_lines = table.split('\n')
         y = (screen_height // 2) - (len(scores_lines) * 20 // 2)
 
-        for line in scores_lines:
-            score_message = font.render(line, True, white)
+        sorted_scores = sorted(self.scores, key=lambda score: score["score"], reverse=True)  
+    
+
+        for line in sorted_scores:
+            score_message = font.render(f"{line['username']}: {line['score']} ", True, white)
             score_rect = score_message.get_rect(center=(screen_width // 2, y))
             screen.blit(score_message, score_rect)
             y += 40 
-            
+
+       
 
 
 class GameOver(Menu):
