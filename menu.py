@@ -7,9 +7,10 @@ from tabulate import tabulate
 
 class Menu:
     def __init__(self) -> None:
-        self.header = ""
-       
+        self.header = None
+        
         self.buttons = []
+        
         self.font = pygame.font.SysFont("Arial", 50)
         self.background = pygame.image.load("./assets/menu/background/main_menu.png")
         self.background_rect = self.background.get_rect(topleft=(0,0))
@@ -22,11 +23,11 @@ class Menu:
         else:
             width = 200
 
-        header = self.font.render(self.header, True, (255, 255, 255))
-        header_rect = pygame.Rect(
-        ((screen_width / 2) - (width / 2)) , screen_height / 4, width, 80)
+        # header = self.font.render(self.header, True, (255, 255, 255))
+        # header_rect = pygame.Rect(
+        # ((screen_width / 2) - (width / 2)) , screen_height / 4, width, 80)
         screen.blit(self.background, self.background_rect)
-        screen.blit(header, header_rect)
+        screen.blit(self.header, self.header_rect)
 
         for button in self.buttons:
             button.draw(screen)
@@ -52,12 +53,15 @@ class MainMenu(Menu):
     def __init__(self) -> None:
         super().__init__()
 
-        self.header = "Main Menu"
+        self.header = pygame.image.load("./assets/menu/headers/main_menu.png")
+        self.width = self.header.get_width()
+        self.header_rect = self.header.get_rect(center=((screen_width / 2) , screen_height / 4 ))
+        
 
         self.buttons = [
-            Button("play", black, white),
-            Button("options", black, white, 80),
-            Button("exit", black, white, 160)
+            Button( pygame.image.load("./assets/menu/buttons/play.png"), pygame.image.load("./assets/menu/buttons/play_hover.png")),
+            Button( pygame.image.load("./assets/menu/buttons/options.png"), pygame.image.load("./assets/menu/buttons/options_hover.png"), 80),
+            Button( pygame.image.load("./assets/menu/buttons/exit.png"), pygame.image.load("./assets/menu/buttons/exit_hover.png") ,  160)
         ]
 
     def handle_button(self):
