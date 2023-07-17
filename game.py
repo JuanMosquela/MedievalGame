@@ -15,8 +15,8 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
-        self.current_level_index = 1
-       
+        self.current_level_index = 2
+
         self.level = None
 
         self.running = True
@@ -41,8 +41,7 @@ class Game:
 
         self.current_level = self.levels[self.current_level_index]
 
-
-    def game_state(self):       
+    def game_state(self):
 
         if self.state == "playing":
             menu.stop()
@@ -65,10 +64,9 @@ class Game:
         if self.state == "restart":
             self.restart_game()
         if self.state == "save":
-            save_game("./data/ranking.json", { "username": self.username, "score": self.total_points })
+            save_game("./data/ranking.json",
+                      {"username": self.username, "score": self.total_points})
             self.state = "ranking"
-
-       
 
     def restart_game(self):
         self.current_level_index = 0
@@ -85,7 +83,6 @@ class Game:
 
         self.current_level = self.levels[self.current_level_index]
 
-
     def display_menu(self):
         menu.play(-1)
         main_menu = MainMenu()
@@ -95,17 +92,17 @@ class Game:
             main_menu.draw(self.screen)
             state = main_menu.update()
             if state != None:
-                self.state = state          
+                self.state = state
 
             pygame.display.update()
             self.clock.tick(60)
 
-    def display_form(self):       
+    def display_form(self):
 
         self.screen.fill((0, 0, 0))
         width = 300
         height = 50
-       
+
         form = TextInput(((screen_width / 2) - (width / 2)),
                          screen_height / 4, width, height, 25)
 
@@ -114,7 +111,7 @@ class Game:
             for event in pygame.event.get():
 
                 form.handle_event(event)
-                form.check_button_click(event)                
+                form.check_button_click(event)
 
             if form.done:
                 self.username = form.text
@@ -123,7 +120,6 @@ class Game:
             pygame.display.update()
             self.clock.tick(60)
 
-    
     def game_loop(self):
         game.play(-1)
 
@@ -140,8 +136,6 @@ class Game:
                     if event.key == pygame.K_p:
                         self.pause_game = not self.pause_game
 
-          
-
             if not self.pause_game:
 
                 self.current_level.run()
@@ -154,7 +148,7 @@ class Game:
                     self.current_level_index += 1
                     self.total_points += self.current_level.points
 
-                    if self.current_level_index >= len(self.levels):                      
+                    if self.current_level_index >= len(self.levels):
                         self.state = "completed"
 
                     else:
@@ -194,11 +188,11 @@ class Game:
 
             self.screen.blit(message, message_rect)
 
-            final_menu.draw(self.screen)            
+            final_menu.draw(self.screen)
 
             state = final_menu.update()
             if state != None:
-                self.state = state               
+                self.state = state
 
             pygame.display.update()
             self.clock.tick(60)
@@ -209,27 +203,19 @@ class Game:
 
             self.screen.fill((0, 0, 0))
 
-            # font = pygame.font.Font(None, 36)
-            # score_message = font.render(
-            #     f"Your score: {self.total_points}", True, white)
-            # score_rect = score_message.get_rect(
-            #     center=(screen_width // 2, screen_height // 2))
-            # self.screen.blit(score_message, score_rect)
+            ranking.draw(self.screen)
 
-            ranking.draw(self.screen)           
-           
             ranking.draw_scores(self.screen)
-          
+
             state = ranking.update()
             if state != None:
-                self.state = state            
+                self.state = state
 
             pygame.display.update()
             self.clock.tick(60)
 
     def game_over(self):
         game_over_menu = GameOver()
-
 
         while self.state == "gameover":
             self.screen.fill((0, 0, 0))
@@ -240,8 +226,5 @@ class Game:
             if state == "restart":
                 self.restart_game()
 
-
             pygame.display.update()
             self.clock.tick(60)
-
-      

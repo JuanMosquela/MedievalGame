@@ -23,7 +23,7 @@ class Button:
             return True
         else:
             return False
-        
+
     def get_hover(self):
         mouse_pos = pygame.mouse.get_pos()
         if self.rect.collidepoint(mouse_pos):
@@ -33,29 +33,23 @@ class Button:
 
     def change_color(self):
         if self.is_hover:
-          self.color = hover
+            self.color = hover
         else:
-          self.color = black    
-
-      
+            self.color = black
 
     def draw(self, screen):
 
         self.get_hover()
         self.change_color()
-       
+
         if self.text == "back":
             self.rect.x = 100
             self.rect.y = 100
-        
+
         border_rect = pygame.Rect(
             self.rect.x - 2, self.rect.y - 2, self.rect.width + 4, self.rect.height + 4
         )
         pygame.draw.rect(screen, self.border_color, border_rect)
         pygame.draw.rect(screen, self.color, self.rect)
 
-
         screen.blit(self.text_surface, (self.rect.x, self.rect.y))
-
-
-

@@ -1,6 +1,7 @@
 import os
 from natsort import natsorted
-import pygame, json
+import pygame
+import json
 import csv
 from settings import tile_size
 
@@ -49,7 +50,7 @@ def import_spritesheet(path):
     for i in range(image_qty):
         rect = pygame.Rect(i * image_height, 0, image_height, image_height)
         image = spritesheet.subsurface(rect)
-        image = image.subsurface(pygame.Rect(55, 50, 60, 53))
+        image = image.subsurface(pygame.Rect(55, 50, 80, 53))
         image = pygame.transform.scale(
             image, (image.get_width() * 2, image.get_height() * 2))
         images.append(image)
@@ -58,8 +59,6 @@ def import_spritesheet(path):
 
 
 def import_assets(path):
-
-  
 
     files_list = []
 
@@ -77,17 +76,16 @@ def import_assets(path):
 
 
 def save_game(path, data):
-    if os.path.exists(path):       
+    if os.path.exists(path):
         try:
             with open(path, 'r') as file:
                 json_file = json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):          
+        except (FileNotFoundError, json.JSONDecodeError):
             json_file = []
-    else:       
+    else:
         json_file = []
-   
+
     json_file.append(data)
-   
+
     with open(path, 'w') as file:
         json.dump(json_file, file, indent=4)
-

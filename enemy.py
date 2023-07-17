@@ -13,9 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         self.pos = pos
         self.screen = screen
         self.player = player
-     
 
-  
         self.current_frame = 0
         self.frame_velocity = 0.15
         self.gravity = 0.8
@@ -35,7 +33,6 @@ class Enemy(pygame.sprite.Sprite):
         self.healthbar = HealthBar(150, 10, self.health)
         self.gravity = 0.8
 
-
         self.current_frame = 0
         self.player_detected = False
 
@@ -45,24 +42,24 @@ class Enemy(pygame.sprite.Sprite):
         self.is_attacking = False
         self.is_hurt = False
         self.horizontal_collision = False
-        
-        # death cooldown 
+
+        # death cooldown
         self.cooldown = 2000
         self.death_timer = 0
 
-        #attack cooldown
+        # attack cooldown
         self.attack_cooldown = 2000
         self.last_attack = 0
 
     def set_initial_state(self):
-        raise NotImplementedError("Subclass must implement set_initial_state()")
-    
+        raise NotImplementedError(
+            "Subclass must implement set_initial_state()")
+
     def apply_gravity(self):
-        if self.type != "flyingEye" or not  self.is_alive :
+        if self.type != "flyingEye" or not self.is_alive:
 
             self.direction.y += self.gravity
-            self.rect.y += self.direction.y 
-
+            self.rect.y += self.direction.y
 
     def import_enemy_assets(self):
         enemy_path = f"./assets/enemys/{self.type}/"
@@ -75,15 +72,14 @@ class Enemy(pygame.sprite.Sprite):
 
             animations[animation] = import_spritesheet(full_path)
 
-        return animations                    
-               
+        return animations
 
     def take_damage(self, arrow_damage):
 
         self.healthbar.max_health -= arrow_damage
         if self.healthbar.max_health <= 0:
             enemy_die.play()
-            
+
             self.is_alive = False
             self.death_timer = pygame.time.get_ticks()
             self.player.increse_points(self.reward)
@@ -92,16 +88,14 @@ class Enemy(pygame.sprite.Sprite):
             enemy_hurt.play()
             self.is_hurt = True
 
-
     def attack(self):
-        
+
         current_time = pygame.time.get_ticks()
         if current_time - self.last_attack >= self.attack_cooldown and self.player.is_alive and self.is_alive:
-            
+
             self.current_frame = 0
             self.last_attack = current_time
-            self.is_attacking = True 
-            
+            self.is_attacking = True
 
     def update_state(self):
         if not self.is_alive:
@@ -115,8 +109,7 @@ class Enemy(pygame.sprite.Sprite):
             elif self.is_attacking:
                 self.state = "attack"
 
-
-    def animation(self):     
+    def animation(self):
 
         animation = self.animations[self.state]
 
@@ -131,21 +124,26 @@ class Enemy(pygame.sprite.Sprite):
             self.is_hurt = False
             self.state = "run"
 
-        if self.is_attacking :
-            if int(self.current_frame) == 7:  
-                  
-                       
+        if self.is_attacking:
+            if self.type != "boss":
+                if int(self.current_frame) == 7:
 
-                if pygame.sprite.collide_rect(self.player, self):
-                   
-                   
-                    self.player.get_hurt(self.damage)
-            if is_last_frame:     
-                        
+                    if pygame.sprite.collide_rect(self.player, self):
+
+                        self.player.get_hurt(self.damage)
+            else:
+                if int(self.current_frame) == 11:
+
+                    if pygame.sprite.collide_rect(self.player, self):
+
+                        self.player.get_hurt(self.damage)
+
+            if is_last_frame:
+
                 self.is_attacking = False
-                self.state = "run"            
+                self.state = "run"
 
-        if not self.is_alive and is_last_frame:           
+        if not self.is_alive and is_last_frame:
 
             self.current_frame = len(animation) - 1
             current_time = pygame.time.get_ticks()
@@ -159,38 +157,30 @@ class Enemy(pygame.sprite.Sprite):
             flipped_image = pygame.transform.flip(self.image, True, False)
             self.image = flipped_image
 
-   
-
     def update(self,  move_world, move_world_y):
 
         self.rect.x += move_world
-        self.rect.y += move_world_y       
+        self.rect.y += move_world_y
 
         self.update_state()
-        self.healthbar.draw(self.screen, (self.rect.centerx, self.rect.top), "enemy")
+        self.healthbar.draw(
+            self.screen, (self.rect.centerx, self.rect.top), "enemy")
         self.animation()
+
 
 class NormalEnemy(Enemy):
     def __init__(self, pos, type, health, damage, speed, reward, screen, player) -> None:
         super().__init__(pos, type, health, damage, speed, reward, screen, player)
-        
+
         self.state = "idle"
-        print(self.current_frame)
+
         self.image = self.animations[self.state][self.current_frame]
         self.rect = self.image.get_rect(center=self.pos)
         self.mask = pygame.mask.from_surface(self.image)
- 
 
     def check_collision(self, rect):
         if pygame.sprite.collide_rect(rect, self.player):
-
             self.player_detected = True
-
-        if self.rect.colliderect(self.player.rect) and not self.is_attacking and self.is_alive:           
-            self.state = "idle"
-            self.attack()
-            
-          
 
     def update_enemy_vision(self):
         rect_width = 200
@@ -202,16 +192,13 @@ class NormalEnemy(Enemy):
 
         self.check_collision(collision_sprite)
 
-
-    
     def move(self):
 
         if self.is_alive:
-            
-            if self.player_detected or self.healthbar.max_health < self.health:
-               
 
-                if self.rect.centerx > self.player.rect.centerx + 40 :
+            if self.player_detected or self.healthbar.max_health < self.health:
+
+                if self.rect.centerx > self.player.rect.centerx + 40:
                     self.rect.x -= self.speed
                     self.direction.x = -1
                     if not self.flipped:
@@ -224,8 +211,6 @@ class NormalEnemy(Enemy):
                 else:
                     self.direction.x = 0
 
-
-    
     def update(self,  move_world, move_world_y):
 
         self.rect.x += move_world
@@ -235,13 +220,12 @@ class NormalEnemy(Enemy):
 
         self.update_state()
 
-        self.healthbar.draw(self.screen, (self.rect.centerx, self.rect.top), "enemy")
+        self.healthbar.draw(
+            self.screen, (self.rect.centerx, self.rect.top), "enemy")
 
         self.update_enemy_vision()
 
         self.animation()
-
-
 
 
 class FlyingEnemy(Enemy):
@@ -253,33 +237,29 @@ class FlyingEnemy(Enemy):
         self.mask = pygame.mask.from_surface(self.image)
         self.distance = 0
         self.flipped = False
-        
+
         self.proyectiles = pygame.sprite.Group()
-        
-        
 
     def import_enemy_assets(self):
         enemy_path = f"./assets/enemys/{self.type}/"
 
-        animations = { "attack": [], "run": [], "hit": [], "death": []}
-
+        animations = {"attack": [], "run": [], "hit": [], "death": []}
 
         for animation in animations.keys():
             full_path = enemy_path + animation
 
             animations[animation] = import_spritesheet(full_path)
 
-        return animations   
+        return animations
 
-    def change_direction(self):        
+    def change_direction(self):
 
         self.speed = -self.speed
-        self.flipped = not self.flipped                 
-               
+        self.flipped = not self.flipped
 
     def fly(self):
         if self.is_alive:
-            self.rect.x += self.speed    
+            self.rect.x += self.speed
 
     def shoot(self):
         current_time = pygame.time.get_ticks()
@@ -288,14 +268,9 @@ class FlyingEnemy(Enemy):
 
             self.last_attack = current_time
             self.is_attacking = True
-            
+
             proyectile = Proyectile((self.rect.centerx, self.rect.centery))
             self.proyectiles.add(proyectile)
-
-
-
-
-   
 
     def update_state(self):
         if not self.is_alive:
@@ -312,8 +287,6 @@ class FlyingEnemy(Enemy):
     def get_projectiles(self):
         return self.proyectiles
 
-
-
     def update(self,  move_world, move_world_y):
 
         self.rect.x += move_world
@@ -326,8 +299,8 @@ class FlyingEnemy(Enemy):
         self.proyectiles.draw(self.screen)
         self.proyectiles.update(move_world, move_world_y)
 
-
-        self.healthbar.draw(self.screen, (self.rect.centerx, self.rect.top), "enemy")
+        self.healthbar.draw(
+            self.screen, (self.rect.centerx, self.rect.top), "enemy")
 
         self.animation()
 
@@ -343,25 +316,18 @@ class Boss(NormalEnemy):
             # image = flipped_image.subsurface(pygame.Rect(85, 40, 126, 119))
             flipped_images.append(flipped_image)
         return flipped_images
-    
-       
 
     def import_enemy_assets(self):
-        animations = {"idle": [], "run": [], "attack": [], "hit": [], "death": []}
+        animations = {"idle": [], "run": [],
+                      "attack": [], "hit": [], "death": []}
         path = "./assets/enemys/boss/"
 
         for action in animations.keys():
             full_path = path + action
 
-
             image_list = import_assets(full_path)
             animations[action] = self.flip_images(image_list)
-        
 
             # animations[action] = import_assets(full_path)
 
-        return animations  
-
-
-
-    
+        return animations
