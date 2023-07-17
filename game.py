@@ -15,7 +15,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
-        self.current_level_index = 2
+        self.current_level_index = 0
 
         self.level = None
 
@@ -157,7 +157,9 @@ class Game:
                     if event.key == pygame.K_p:
                         self.pause_game = not self.pause_game
 
-                self.current_level.boss.handle_event(event)
+                if self.current_level.boss is not None:
+
+                    self.current_level.boss.handle_event(event)
 
             pygame.display.update()
             self.clock.tick(60)

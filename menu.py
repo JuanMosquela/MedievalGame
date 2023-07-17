@@ -67,9 +67,9 @@ class MenuFinal(Menu):
 
         self.buttons = [
             Button("play again", white, white),
-            Button("ranking", white, white, 50),
-            Button("save", white, white, 100),
-            Button("exit", white, white , 150)
+            Button("ranking", white, white, 80),
+            Button("save", white, white, 160),
+            Button("exit", white, white , 240)
         ]
 
     
@@ -140,7 +140,7 @@ class GameOver(Menu):
         super().__init__()
         self.buttons = [
             Button("restart", white, white),
-            Button("exit", white, white, 50)            
+            Button("exit", white, white, 80)            
         ]
 
 

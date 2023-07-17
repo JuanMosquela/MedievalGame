@@ -95,14 +95,14 @@ class Collisions:
         player = self.player_group.sprite
 
         for enemy in self.enemys_group:
-            if enemy.type != "boss":
-                if pygame.sprite.spritecollide(
+           
+            if pygame.sprite.spritecollide(
                         player, self.enemys_group, False, pygame.sprite.collide_rect):
                     enemy.attack()
-            else:
-                if pygame.sprite.collide_mask(
-                        player, enemy):
-                    enemy.attack()
+            # else:
+            #     if pygame.sprite.collide_mask(
+            #             player, enemy):
+            #         enemy.attack()
 
     def check_tramps_collisions(self):
 

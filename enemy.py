@@ -29,6 +29,7 @@ class Enemy(pygame.sprite.Sprite):
         self.damage = damage
         self.speed = speed
         self.reward = reward
+        self.hit = False
 
         self.direction = pygame.Vector2(0, 0)
         self.healthbar = HealthBar(150, 10, self.health)
@@ -49,7 +50,7 @@ class Enemy(pygame.sprite.Sprite):
         self.death_timer = 0
 
         # attack cooldown
-        self.attack_cooldown = 500
+        self.attack_cooldown = 2000
         self.last_attack = 0
 
     def set_initial_state(self):
@@ -128,12 +129,14 @@ class Enemy(pygame.sprite.Sprite):
         if self.is_attacking:
             if self.type != "boss":
                 if int(self.current_frame) == 7:
+                   
 
                     if pygame.sprite.collide_rect(self.player, self):
 
                         self.player.get_hurt(self.damage)
             else:
                 if int(self.current_frame) == 11:
+                
 
                     if pygame.sprite.collide_rect(self.player, self):
 
@@ -142,6 +145,7 @@ class Enemy(pygame.sprite.Sprite):
             if is_last_frame:
 
                 self.is_attacking = False
+                self.hit = False
                 self.state = "run"
 
         if not self.is_alive and is_last_frame:
@@ -198,13 +202,17 @@ class NormalEnemy(Enemy):
         if self.is_alive:
 
             if self.player_detected or self.healthbar.max_health < self.health:
+                if self.type != "boss":
+                    distance = 40
+                else:
+                    distance = 180
 
-                if self.rect.centerx > self.player.rect.centerx + 40:
+                if self.rect.centerx > self.player.rect.centerx + distance:
                     self.rect.x -= self.speed
                     self.direction.x = -1
                     if not self.flipped:
                         self.flipped = True
-                elif self.rect.centerx < self.player.rect.centerx - 40:
+                elif self.rect.centerx < self.player.rect.centerx - distance:
                     self.rect.x += self.speed
                     self.direction.x = 1
                     if self.flipped:
@@ -309,6 +317,7 @@ class FlyingEnemy(Enemy):
 class Boss(NormalEnemy):
     def __init__(self, pos, type, health, damage, speed, reward, screen, player, level) -> None:
         super().__init__(pos, type, health, damage, speed, reward, screen, player)
+        self.player_detected = True
 
         self.level = level
         self.SPAWN_ENEMIES = pygame.USEREVENT + 1
@@ -367,5 +376,5 @@ class Boss(NormalEnemy):
         return animations
 
     def handle_event(self, event):
-        if event.type == self.SPAWN_ENEMIES:
+        if event.type == self.SPAWN_ENEMIES and self.is_alive:
             self.spawn_random_enemy()

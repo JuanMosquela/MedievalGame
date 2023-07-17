@@ -7,6 +7,7 @@ from enemy import *
 from settings import *
 from level_data import background_paths
 from collisions import Collisions
+from random import randint
 
 
 class Level:
@@ -18,9 +19,28 @@ class Level:
         self.completed = False
         self.current_level = current_level
         self.completed = False
-        self.level_limit = 2200
+
+        if self.current_level != 2:
+            self.level_limit = 2200
+        else:
+            self.level_limit = 1200
+
         self.points = 0
         self.game_over = False
+
+
+        self.shake_duration = 60
+        self.shake_intensity = 2
+        self.shake_offset_x = 0
+        self.shake_offset_y = 0
+
+        self.cooldown = 3000
+        self.last_time = 0
+
+        self.boss = None
+        self.boss_defeated = False
+
+        
 
         # terrain
         self.terrain_layout = import_csv(level_map["terrain"])
@@ -222,7 +242,7 @@ class Level:
 
                 if val == "5":
 
-                    self.boss = Boss((x, y), "boss", 500, 15, 1,
+                    self.boss = Boss((x, y), "boss", 500, 15, 2,
                                      25, self.screen, self.player, self)
                     self.enemys.add(self.boss)
 
@@ -256,11 +276,22 @@ class Level:
     def add_enemies(self, enemies):
         self.enemys.add(enemies)
 
+    def shake_world(self):
+        if self.shake_duration > 0:
+            self.shake_offset_x = randint(-self.shake_intensity, self.shake_intensity)
+            self.shake_offset_y = randint(-self.shake_intensity, self.shake_intensity)
+            self.shake_duration -= 1
+       
+
     def run(self):
 
         self.draw_background()
         self.check_player_health()
         self.scroll_x()
+
+
+
+        
 
         self.background_sprites.draw(self.screen)
         self.background_sprites.update(self.move_world,  self.move_world_y)
@@ -276,6 +307,7 @@ class Level:
 
         self.obstacles_sprites.draw(self.screen)
         self.obstacles_sprites.update(self.move_world, self.move_world_y)
+        
 
         self.puzzle_sprites.draw(self.screen)
         self.puzzle_sprites.update(self.move_world, self.move_world_y)
@@ -297,3 +329,16 @@ class Level:
 
         self.enemys.draw(self.screen)
         self.enemys.update(self.move_world, self.move_world_y)
+
+        if self.boss is not None:
+
+
+            if not self.boss.is_alive and not self.boss_defeated:
+                self.last_time = pygame.time.get_ticks()
+                self.boss_defeated = True      
+
+                for enemy in self.enemys:
+                    enemy.is_alive = False                
+
+            if self.boss_defeated and pygame.time.get_ticks() - self.last_time >= self.cooldown:                        
+                self.completed = True
