@@ -124,17 +124,6 @@ class Game:
         game.play(-1)
 
         while self.state == "playing":
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    sys.exit()
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-
-                        self.state = "menu"
-                    if event.key == pygame.K_p:
-                        self.pause_game = not self.pause_game
 
             if not self.pause_game:
 
@@ -155,6 +144,20 @@ class Game:
                         self.current_level = self.levels[self.current_level_index]
             else:
                 self.draw_pause_screen()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                    sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+
+                        self.state = "menu"
+                    if event.key == pygame.K_p:
+                        self.pause_game = not self.pause_game
+
+                self.current_level.boss.handle_event(event)
 
             pygame.display.update()
             self.clock.tick(60)

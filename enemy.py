@@ -1,4 +1,5 @@
 import pygame
+from random import randint
 from utils.helpers import import_spritesheet, import_assets
 from healthbar import HealthBar
 from settings import *
@@ -48,7 +49,7 @@ class Enemy(pygame.sprite.Sprite):
         self.death_timer = 0
 
         # attack cooldown
-        self.attack_cooldown = 2000
+        self.attack_cooldown = 500
         self.last_attack = 0
 
     def set_initial_state(self):
@@ -100,7 +101,7 @@ class Enemy(pygame.sprite.Sprite):
     def update_state(self):
         if not self.is_alive:
             self.state = "death"
-            self.frame_velocity = 0.05
+
         else:
             if self.is_hurt:
                 self.state = "hit"
@@ -306,8 +307,12 @@ class FlyingEnemy(Enemy):
 
 
 class Boss(NormalEnemy):
-    def __init__(self, pos, type, health, damage, speed, reward, screen, player) -> None:
+    def __init__(self, pos, type, health, damage, speed, reward, screen, player, level) -> None:
         super().__init__(pos, type, health, damage, speed, reward, screen, player)
+
+        self.level = level
+        self.SPAWN_ENEMIES = pygame.USEREVENT + 1
+        pygame.time.set_timer(self.SPAWN_ENEMIES, 5000)
 
     def flip_images(self, image_list):
         flipped_images = []
@@ -316,6 +321,37 @@ class Boss(NormalEnemy):
             # image = flipped_image.subsurface(pygame.Rect(85, 40, 126, 119))
             flipped_images.append(flipped_image)
         return flipped_images
+
+    def spawn_random_enemy(self):
+        random_int = randint(1, 4)
+        random_origin = randint(1, 2)
+
+        if random_origin == 1:
+            origin = 0
+        else:
+            origin = screen_width
+
+        match(random_int):
+            case 1:
+                type = "goblin"
+            case 2:
+                type = "mushroom"
+            case 3:
+                type = "skeleton"
+            case 4:
+                type = "flyingEye"
+
+        if type != "flyingEye":
+
+            enemy = NormalEnemy((origin, 500), type, 150, 15,
+                                2, 25, self.screen, self.player)
+            enemy.player_detected = True
+
+        else:
+            enemy = FlyingEnemy((0, 100), type, 50, 15, 4,
+                                25, self.screen, self.player)
+
+        self.level.add_enemies(enemy)
 
     def import_enemy_assets(self):
         animations = {"idle": [], "run": [],
@@ -328,6 +364,8 @@ class Boss(NormalEnemy):
             image_list = import_assets(full_path)
             animations[action] = self.flip_images(image_list)
 
-            # animations[action] = import_assets(full_path)
-
         return animations
+
+    def handle_event(self, event):
+        if event.type == self.SPAWN_ENEMIES:
+            self.spawn_random_enemy()

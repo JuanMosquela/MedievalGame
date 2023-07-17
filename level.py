@@ -22,9 +22,6 @@ class Level:
         self.points = 0
         self.game_over = False
 
-        
-       
-
         # terrain
         self.terrain_layout = import_csv(level_map["terrain"])
         self.terrain_sprites = self.create_tile_group(
@@ -35,33 +32,33 @@ class Level:
         self.background_sprites = self.create_tile_group(
             self.background_layout, "background")
 
-        #decorations
+        # decorations
         self.decorations_layout = import_csv(level_map["decorations"])
-        self.decorations_sprites = self.create_tile_group(self.decorations_layout, "decorations")
+        self.decorations_sprites = self.create_tile_group(
+            self.decorations_layout, "decorations")
 
-        #tramps
+        # tramps
         self.tramps_layout = import_csv(level_map["tramps"])
-        self.tramps_sprites = self.create_tile_group(self.tramps_layout, "tramps")
+        self.tramps_sprites = self.create_tile_group(
+            self.tramps_layout, "tramps")
 
-        #obstacles
+        # obstacles
         self.obstacles_layout = import_csv(level_map["obstacles"])
-        self.obstacles_sprites = self.create_tile_group(self.obstacles_layout, "obstacles")
+        self.obstacles_sprites = self.create_tile_group(
+            self.obstacles_layout, "obstacles")
 
-        #obstacles
+        # obstacles
         self.puzzle_layout = import_csv(level_map["puzzles"])
-        self.puzzle_sprites = self.create_tile_group(self.puzzle_layout, "puzzles")
+        self.puzzle_sprites = self.create_tile_group(
+            self.puzzle_layout, "puzzles")
 
-        #keys
+        # keys
         self.keys_layout = import_csv(level_map["keys"])
         self.keys_sprites = self.create_tile_group(self.keys_layout, "keys")
-        
-        #coins
+
+        # coins
         self.coins_layout = import_csv(level_map["coins"])
         self.coins_sprites = self.create_tile_group(self.coins_layout, "coins")
-        
-
-
-
 
         # character
 
@@ -75,9 +72,6 @@ class Level:
             self.characters_layout)
         self.enemy_sprites = self.enemy_setup(
             self.characters_layout)
-       
-        
-        
 
         self.backgrounds = []
 
@@ -88,9 +82,8 @@ class Level:
             background_rect = background.get_rect()
             self.backgrounds.append((background, background_rect))
 
-        self.collisions = Collisions(self.enemys, self.player_group, self.terrain_sprites, self.puzzle_sprites, self.tramps_sprites, self.coins_sprites, self.keys_sprites, self.obstacles_sprites)
-
-   
+        self.collisions = Collisions(self.enemys, self.player_group, self.terrain_sprites, self.puzzle_sprites,
+                                     self.tramps_sprites, self.coins_sprites, self.keys_sprites, self.obstacles_sprites)
 
     def draw_background(self):
         for background, background_rect in self.backgrounds:
@@ -129,7 +122,8 @@ class Level:
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
                     if type == "decorations":
-                        decorations_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain.png")
+                        decorations_tiles = import_cut_graphics(
+                            f"./assets/terrain/{self.current_level}/terrain.png")
                         tile_surface = decorations_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -137,9 +131,9 @@ class Level:
                             tile_surface, (tile_size * 2, tile_size * 2)), (0, 0))
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
-                    
                     if type == "tramps":
-                        tramps_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain.png")
+                        tramps_tiles = import_cut_graphics(
+                            f"./assets/terrain/{self.current_level}/terrain.png")
                         tile_surface = tramps_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -147,13 +141,12 @@ class Level:
                             tile_surface, (tile_size * 2, tile_size * 2)), (0, 0))
                         sprite = Tramp(x, y, tile_size * 2, new_surface)
 
-                        
-
                     if type == "obstacles":
                         sprite = Tile(x, y, tile_size)
 
                     if type == "puzzles":
-                        puzzle_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain_2.png")
+                        puzzle_tiles = import_cut_graphics(
+                            f"./assets/terrain/{self.current_level}/terrain_2.png")
                         tile_surface = puzzle_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -162,7 +155,8 @@ class Level:
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
                     if type == "keys":
-                        keys_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain_2.png")
+                        keys_tiles = import_cut_graphics(
+                            f"./assets/terrain/{self.current_level}/terrain_2.png")
                         tile_surface = keys_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -171,7 +165,8 @@ class Level:
                         sprite = StaticTile(x, y, tile_size * 2, new_surface)
 
                     if type == "coins":
-                        coin_tiles = import_cut_graphics(f"./assets/terrain/{self.current_level}/terrain_2.png")
+                        coin_tiles = import_cut_graphics(
+                            f"./assets/terrain/{self.current_level}/terrain_2.png")
                         tile_surface = coin_tiles[int(val)]
                         new_surface = pygame.Surface(
                             (tile_size * 2, tile_size * 2), pygame.SRCALPHA)
@@ -182,7 +177,7 @@ class Level:
                     sprite_group.add(sprite)
 
         return sprite_group
-    
+
     def update_points(self):
         self.points = self.player_group.sprite.points
 
@@ -197,7 +192,6 @@ class Level:
 
                     self.player = Player((x, y), self.screen)
                     self.player_group.add(self.player)
-               
 
     def enemy_setup(self, layout):
         for row_index, row in enumerate(layout):
@@ -207,29 +201,30 @@ class Level:
 
                 if val == "1":
 
-                    goblin = NormalEnemy((x, y), "goblin", 100, 10, 3,  15, self.screen, self.player)
+                    goblin = NormalEnemy(
+                        (x, y), "goblin", 100, 10, 3,  15, self.screen, self.player)
                     self.enemys.add(goblin)
                 if val == "2":
 
-                    mushroom = NormalEnemy((x, y), "mushroom", 120, 15, 2,  25, self.screen, self.player)
+                    mushroom = NormalEnemy(
+                        (x, y), "mushroom", 120, 15, 2,  25, self.screen, self.player)
                     self.enemys.add(mushroom)
                 if val == "3":
 
-                    skeleton = NormalEnemy((x, y), "skeleton", 150, 15, 2,  25, self.screen, self.player)
+                    skeleton = NormalEnemy(
+                        (x, y), "skeleton", 150, 15, 2,  25, self.screen, self.player)
                     self.enemys.add(skeleton)
                 if val == "4":
 
-                    flyingEye = FlyingEnemy((x, y), "flyingEye", 50, 15, 2,  25, self.screen, self.player)
-                    self.enemys.add(flyingEye)  
-                
+                    flyingEye = FlyingEnemy(
+                        (x, y), "flyingEye", 50, 15, 2,  25, self.screen, self.player)
+                    self.enemys.add(flyingEye)
+
                 if val == "5":
 
-                    boss = Boss((x, y), "boss", 500, 15, 1,  25, self.screen, self.player)
-                    self.enemys.add(boss)  
-
-   
-
-           
+                    self.boss = Boss((x, y), "boss", 500, 15, 1,
+                                     25, self.screen, self.player, self)
+                    self.enemys.add(self.boss)
 
     def scroll_x(self):
         player = self.player_group.sprite
@@ -247,38 +242,34 @@ class Level:
 
         else:
             self.move_world = 0
-            player.speed = 8   
+            player.speed = 8
             if player.rect.x >= screen_width:
-                self.completed = True 
+                self.completed = True
 
     def check_player_health(self):
         player = self.player_group.sprite
         health = player.get_health()
-   
+
         if health <= 0:
             self.game_over = True
-        
-                
-       
 
+    def add_enemies(self, enemies):
+        self.enemys.add(enemies)
 
-    def run(self):    
+    def run(self):
 
-           
-     
         self.draw_background()
         self.check_player_health()
         self.scroll_x()
-      
 
         self.background_sprites.draw(self.screen)
-        self.background_sprites.update(self.move_world,  self.move_world_y )
+        self.background_sprites.update(self.move_world,  self.move_world_y)
 
         self.decorations_sprites.draw(self.screen)
         self.decorations_sprites.update(self.move_world, self.move_world_y)
 
         self.terrain_sprites.draw(self.screen)
-        self.terrain_sprites.update(self.move_world, self.move_world_y ) 
+        self.terrain_sprites.update(self.move_world, self.move_world_y)
 
         self.tramps_sprites.draw(self.screen)
         self.tramps_sprites.update(self.move_world, self.move_world_y)
@@ -295,14 +286,12 @@ class Level:
         self.coins_sprites.draw(self.screen)
         self.coins_sprites.update(self.move_world, self.move_world_y)
 
-
-        for enemy in self.enemys.sprites():
-            pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)     
-
+        # for enemy in self.enemys.sprites():
+        #     pygame.draw.rect(self.screen, (255, 0, 0), enemy.rect, 2)
 
         self.collisions.check()
         self.update_points()
-        
+
         self.player_group.draw(self.screen)
         self.player_group.update()
 
