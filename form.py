@@ -12,6 +12,9 @@ class TextInput:
         self.min_characters = 4
         self.done = False
         self.accept_button = Button("Accept", (255, 255, 255), (255, 255, 255))
+        self.background = pygame.image.load("./assets/menu/background/main_menu.png")
+        self.background_rect = self.background.get_rect(topleft=(0,0))
+        
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -31,14 +34,12 @@ class TextInput:
     def draw(self, screen, width, height):
         header = self.font.render("Ingresa tu nombre", True, (255, 255, 255))
         header_rect = pygame.Rect(
-            width, height, ((screen_width / 2) - (width / 2)), screen_height / 4)
+            width, height, ((screen_width / 2) - (width / 2)), screen_height / 4)        
 
-        screen.blit(header, header_rect)
 
+        screen.blit(self.background, self.background_rect)
         pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
-
         rendered_text = self.font.render(self.text, True, (255, 255, 255))
-
-        self.accept_button.draw(screen)
-
+        screen.blit(header, header_rect)
         screen.blit(rendered_text, (self.rect.x + 5, self.rect.y + 5))
+        self.accept_button.draw(screen)

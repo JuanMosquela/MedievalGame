@@ -11,13 +11,21 @@ class Menu:
        
         self.buttons = []
         self.font = pygame.font.SysFont("Arial", 50)
+        self.background = pygame.image.load("./assets/menu/background/main_menu.png")
+        self.background_rect = self.background.get_rect(topleft=(0,0))
 
 
-    def draw(self, screen):      
+    def draw(self, screen):  
+
+        if self.header == "¡Game Completed!":
+            width = 350
+        else:
+            width = 200
 
         header = self.font.render(self.header, True, (255, 255, 255))
         header_rect = pygame.Rect(
-        ((screen_width / 2) - (200 / 2)) , screen_height / 4, 200, 80)
+        ((screen_width / 2) - (width / 2)) , screen_height / 4, width, 80)
+        screen.blit(self.background, self.background_rect)
         screen.blit(header, header_rect)
 
         for button in self.buttons:
@@ -64,6 +72,7 @@ class MainMenu(Menu):
 class MenuFinal(Menu):
     def __init__(self) -> None:
         super().__init__()
+        self.header = "¡Game Completed!"
 
         self.buttons = [
             Button("play again", white, white),
@@ -89,6 +98,7 @@ class MenuFinal(Menu):
 class RankingMenu(Menu):
     def __init__(self) -> None:
         super().__init__()
+        self.header = "Ranking"
         self.buttons = [
             Button("back", white, white),
             
@@ -138,6 +148,7 @@ class RankingMenu(Menu):
 class GameOver(Menu):
     def __init__(self) -> None:
         super().__init__()
+        self.header = "Game Over"
         self.buttons = [
             Button("restart", white, white),
             Button("exit", white, white, 80)            

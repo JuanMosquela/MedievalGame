@@ -15,7 +15,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((screen_width, screen_height))
         self.clock = pygame.time.Clock()
-        self.current_level_index = 0
+        self.current_level_index = 2
 
         self.level = None
 
@@ -27,7 +27,7 @@ class Game:
         self.level_points = 0
         self.total_points = 0
 
-        self.state = "playing"
+        self.state = "menu"
         self.username = ""
 
         self.font = pygame.font.SysFont("Arial", 50)

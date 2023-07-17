@@ -50,7 +50,7 @@ class Enemy(pygame.sprite.Sprite):
         self.death_timer = 0
 
         # attack cooldown
-        self.attack_cooldown = 2000
+        self.attack_cooldown = 3000
         self.last_attack = 0
 
     def set_initial_state(self):
@@ -104,7 +104,7 @@ class Enemy(pygame.sprite.Sprite):
             self.state = "death"
 
         else:
-            if self.is_hurt:
+            if self.is_hurt and not self.is_attacking:
                 self.state = "hit"
             elif self.direction.x != 0:
                 self.state = "run"
@@ -202,10 +202,9 @@ class NormalEnemy(Enemy):
         if self.is_alive:
 
             if self.player_detected or self.healthbar.max_health < self.health:
-                if self.type != "boss":
-                    distance = 40
-                else:
-                    distance = 180
+               
+                distance = 40
+               
 
                 if self.rect.centerx > self.player.rect.centerx + distance:
                     self.rect.x -= self.speed
@@ -321,7 +320,7 @@ class Boss(NormalEnemy):
 
         self.level = level
         self.SPAWN_ENEMIES = pygame.USEREVENT + 1
-        pygame.time.set_timer(self.SPAWN_ENEMIES, 5000)
+        pygame.time.set_timer(self.SPAWN_ENEMIES, 7000)
 
     def flip_images(self, image_list):
         flipped_images = []
