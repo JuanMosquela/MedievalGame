@@ -8,6 +8,7 @@ from button import Button
 from utils.helpers import save_game
 from form import TextInput
 from menu import *
+from sql import *
 
 
 class Game:
@@ -27,8 +28,8 @@ class Game:
         self.level_points = 0
         self.total_points = 0
 
-        self.state = "menu"
-        self.username = ""
+        self.state = "completed"
+        self.username = "test"
 
         self.font = pygame.font.SysFont("Arial", 50)
 
@@ -54,7 +55,9 @@ class Game:
             self.display_game_completed_screen()
 
         if self.state == "ranking":
-            self.ranking_menu()
+            data = load_scores()
+            print(data)
+            self.ranking_menu(data)
 
         if self.state == "form":
             self.display_form()
@@ -64,8 +67,9 @@ class Game:
         if self.state == "restart":
             self.restart_game()
         if self.state == "save":
-            save_game("./data/ranking.json",
-                      {"username": self.username, "score": self.total_points})
+            create_table()
+            save_data(self.username, self.total_points)
+
             self.state = "ranking"
 
     def restart_game(self):
@@ -202,7 +206,7 @@ class Game:
             pygame.display.update()
             self.clock.tick(60)
 
-    def ranking_menu(self):
+    def ranking_menu(self, data):
         ranking = RankingMenu()
         while self.state == "ranking":
 
@@ -210,7 +214,7 @@ class Game:
 
             ranking.draw(self.screen)
 
-            ranking.draw_scores(self.screen)
+            ranking.draw_scores(self.screen, data)
 
             state = ranking.update()
             if state != None:
