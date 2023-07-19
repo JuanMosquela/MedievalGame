@@ -1,31 +1,22 @@
-import pygame, sys, json
+import pygame
+from tabulate import tabulate
+import sys
 from button import Button
 from settings import *
-from utils.helpers import save_game
-from tabulate import tabulate
 
 
 class Menu:
     def __init__(self) -> None:
         self.header = None
-        
+
         self.buttons = []
-        
-        self.font = pygame.font.SysFont("Arial", 50)
-        self.background = pygame.image.load("./assets/menu/background/main_menu.png")
-        self.background_rect = self.background.get_rect(topleft=(0,0))
+        self.background = pygame.image.load(
+            "./assets/menu/background/main_menu.png")
+        self.background_rect = self.background.get_rect(topleft=(0, 0))
 
+    def draw(self, screen):
+        mouse_pos = pygame.mouse.get_pos()
 
-    def draw(self, screen):  
-
-        if self.header == "¡Game Completed!":
-            width = 350
-        else:
-            width = 200
-
-        # header = self.font.render(self.header, True, (255, 255, 255))
-        # header_rect = pygame.Rect(
-        # ((screen_width / 2) - (width / 2)) , screen_height / 4, width, 80)
         screen.blit(self.background, self.background_rect)
         screen.blit(self.header, self.header_rect)
 
@@ -43,7 +34,7 @@ class Menu:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 return self.handle_button()
-            
+
     def exit(self):
         pygame.quit()
         sys.exit()
@@ -52,16 +43,20 @@ class Menu:
 class MainMenu(Menu):
     def __init__(self) -> None:
         super().__init__()
-
         self.header = pygame.image.load("./assets/menu/headers/main_menu.png")
         self.width = self.header.get_width()
-        self.header_rect = self.header.get_rect(center=((screen_width / 2) , screen_height / 4 ))
-        
+        self.header_rect = self.header.get_rect(
+            center=((screen_width / 2), screen_height / 4))
 
         self.buttons = [
-            Button( pygame.image.load("./assets/menu/buttons/play.png"), pygame.image.load("./assets/menu/buttons/play_hover.png")),
-            Button( pygame.image.load("./assets/menu/buttons/options.png"), pygame.image.load("./assets/menu/buttons/options_hover.png"), 80),
-            Button( pygame.image.load("./assets/menu/buttons/exit.png"), pygame.image.load("./assets/menu/buttons/exit_hover.png") ,  160)
+            Button(pygame.image.load("./assets/menu/buttons/play.png"),
+                   pygame.image.load("./assets/menu/buttons/play_hover.png")),
+          
+            Button(pygame.image.load("./assets/menu/buttons/options.png"),
+                   pygame.image.load("./assets/menu/buttons/options_hover.png"), 80),
+
+            Button(pygame.image.load("./assets/menu/buttons/exit.png"),
+                   pygame.image.load("./assets/menu/buttons/exit_hover.png"), 160)
         ]
 
     def handle_button(self):
@@ -70,23 +65,29 @@ class MainMenu(Menu):
         if self.buttons[0].check_clicked(mouse_pos):
             return "form"
         if self.buttons[2].check_clicked(mouse_pos):
-            self.exit()
+            pygame.quit()
+            sys.exit()
 
 
 class MenuFinal(Menu):
     def __init__(self) -> None:
         super().__init__()
         self.header = pygame.image.load("./assets/menu/headers/game_completed.png")
-        self.header_rect = self.header.get_rect(center=((screen_width / 2) , screen_height / 4 ))
+        self.width = self.header.get_width()
+        self.header_rect = self.header.get_rect(
+            center=((screen_width / 2), screen_height / 4))
 
         self.buttons = [
-            Button(pygame.image.load("./assets/menu/buttons/play_again.png"), pygame.image.load("./assets/menu/buttons/play_again_hover.png")),
-            Button(pygame.image.load("./assets/menu/buttons/ranking.png"), pygame.image.load("./assets/menu/buttons/ranking_hover.png"), 80),
-            Button(pygame.image.load("./assets/menu/buttons/save.png"), pygame.image.load("./assets/menu/buttons/save_hover.png"), 160),
-            Button(pygame.image.load("./assets/menu/buttons/exit.png"), pygame.image.load("./assets/menu/buttons/exit_hover.png") , 240)
+            Button(pygame.image.load("./assets/menu/buttons/play_again.png"),
+                   pygame.image.load("./assets/menu/buttons/play_again_hover.png")),
+            Button(pygame.image.load("./assets/menu/buttons/ranking.png"),
+                   pygame.image.load("./assets/menu/buttons/ranking_hover.png"), 80),
+            Button(pygame.image.load("./assets/menu/buttons/save.png"),
+                   pygame.image.load("./assets/menu/buttons/save_hover.png"), 160),
+            Button(pygame.image.load("./assets/menu/buttons/exit.png"),
+                   pygame.image.load("./assets/menu/buttons/exit_hover.png"), 240)
         ]
 
-    
     def handle_button(self):
         mouse_pos = pygame.mouse.get_pos()
 
@@ -104,20 +105,15 @@ class RankingMenu(Menu):
     def __init__(self) -> None:
         super().__init__()
         self.header = pygame.image.load("./assets/menu/headers/ranking.png")
-        self.header_rect = self.header.get_rect(center=((screen_width / 2) , screen_height / 4 ))
+        self.width = self.header.get_width()
+        self.header_rect = self.header.get_rect(
+            center=((screen_width / 2), screen_height / 4))
         self.buttons = [
-            Button("back", white, white),
-            
+            Button(pygame.image.load("./assets/menu/buttons/back.png"),
+                   pygame.image.load("./assets/menu/buttons/back_hover.png")),
+
         ]
         self.scores = []
-
-
-    def load_scores(self):
-        try:
-            with open("./data/ranking.json", "r") as file:
-                    self.scores = json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-                self.scores = []
 
     def handle_button(self):
         mouse_pos = pygame.mouse.get_pos()
@@ -126,12 +122,10 @@ class RankingMenu(Menu):
         if self.buttons[1].check_clicked(mouse_pos):
             self.exit()
 
-    def draw_scores(self, screen):
-
-        self.load_scores()
-
-        table_data = [[score['username'], score['score']] for score in self.scores]
-        table_headers = ['Nombre', 'Puntaje']
+    def draw_scores(self, screen, data):
+        table_headers = ['ID', 'Nombre', 'Puntaje']
+        table_data = [[str(score[0]), score[1], str(score[2])]
+                      for score in data]
 
         table = tabulate(table_data, headers=table_headers, tablefmt='plain')
 
@@ -139,27 +133,24 @@ class RankingMenu(Menu):
         scores_lines = table.split('\n')
         y = (screen_height // 2) - (len(scores_lines) * 20 // 2)
 
-        sorted_scores = sorted(self.scores, key=lambda score: score["score"], reverse=True)  
-    
-
-        for line in sorted_scores:
-            score_message = font.render(f"{line['username']}: {line['score']} ", True, white)
+        for line in scores_lines:
+            score_message = font.render(line, True, white)
             score_rect = score_message.get_rect(center=(screen_width // 2, y))
             screen.blit(score_message, score_rect)
-            y += 40 
-
-       
+            y += 40
 
 
 class GameOver(Menu):
     def __init__(self) -> None:
         super().__init__()
-        self.header = "Game Over"
+        self.header = pygame.image.load("./assets/menu/headers/game_over.png")
+        self.width = self.header.get_width()
+        self.header_rect = self.header.get_rect(
+            center=((screen_width / 2), screen_height / 4))
         self.buttons = [
             Button("restart", white, white),
-            Button("exit", white, white, 80)            
+            Button("exit", white, white, 50)
         ]
-
 
     def handle_button(self):
         mouse_pos = pygame.mouse.get_pos()
@@ -167,5 +158,3 @@ class GameOver(Menu):
             return "restart"
         if self.buttons[1].check_clicked(mouse_pos):
             self.exit()
-
-    

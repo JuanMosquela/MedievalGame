@@ -7,7 +7,7 @@ class TextInput:
     def __init__(self, x, y, width, height, max_length):
         self.rect = pygame.Rect(x, y, width, height)
         self.text = ""
-        self.font = pygame.font.SysFont("white", 50)
+        self.font = pygame.font.SysFont("Arial", 50)
         self.max_length = max_length
         self.min_characters = 4
         self.done = False
@@ -34,8 +34,7 @@ class TextInput:
     def draw(self, screen, width, height):
         header = self.font.render("Ingresa tu nombre", True, (255, 255, 255))
         header_rect = pygame.Rect(
-            width, height, ((screen_width / 2) - (width / 2)), screen_height / 4)        
-
+            width, height, ((screen_width / 2) - (width / 2)), screen_height / 4)
 
         screen.blit(self.background, self.background_rect)
         pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)

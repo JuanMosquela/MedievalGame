@@ -5,10 +5,6 @@ from settings import *
 class Button:
     def __init__(self, image, image_hover,  offset=0) -> None:
 
-       
-        
-       
-   
         self.image = image
         self.image_hover = image_hover
         self.current_image = self.image
@@ -47,7 +43,6 @@ class Button:
 
         # if self.text == "back":
         #     self.rect.x = 100
-        #     self.rect.y = 100      
-     
+        #     self.rect.y = 100
 
         screen.blit(self.current_image, self.rect)
