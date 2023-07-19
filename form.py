@@ -11,7 +11,7 @@ class TextInput:
         self.max_length = max_length
         self.min_characters = 4
         self.done = False
-        self.accept_button = Button("Accept", (255, 255, 255), (255, 255, 255))
+        self.accept_button = Button(pygame.image.load("./assets/menu/buttons/enter.png"), pygame.image.load("./assets/menu/buttons/enter_hover.png"))
         self.background = pygame.image.load("./assets/menu/background/main_menu.png")
         self.background_rect = self.background.get_rect(topleft=(0,0))
         

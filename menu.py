@@ -76,13 +76,14 @@ class MainMenu(Menu):
 class MenuFinal(Menu):
     def __init__(self) -> None:
         super().__init__()
-        self.header = "¡Game Completed!"
+        self.header = pygame.image.load("./assets/menu/headers/game_completed.png")
+        self.header_rect = self.header.get_rect(center=((screen_width / 2) , screen_height / 4 ))
 
         self.buttons = [
-            Button("play again", white, white),
-            Button("ranking", white, white, 80),
-            Button("save", white, white, 160),
-            Button("exit", white, white , 240)
+            Button(pygame.image.load("./assets/menu/buttons/play_again.png"), pygame.image.load("./assets/menu/buttons/play_again_hover.png")),
+            Button(pygame.image.load("./assets/menu/buttons/ranking.png"), pygame.image.load("./assets/menu/buttons/ranking_hover.png"), 80),
+            Button(pygame.image.load("./assets/menu/buttons/save.png"), pygame.image.load("./assets/menu/buttons/save_hover.png"), 160),
+            Button(pygame.image.load("./assets/menu/buttons/exit.png"), pygame.image.load("./assets/menu/buttons/exit_hover.png") , 240)
         ]
 
     
@@ -102,7 +103,8 @@ class MenuFinal(Menu):
 class RankingMenu(Menu):
     def __init__(self) -> None:
         super().__init__()
-        self.header = "Ranking"
+        self.header = pygame.image.load("./assets/menu/headers/ranking.png")
+        self.header_rect = self.header.get_rect(center=((screen_width / 2) , screen_height / 4 ))
         self.buttons = [
             Button("back", white, white),
             
