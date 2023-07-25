@@ -73,6 +73,7 @@ class Game:
             self.state = "ranking"
 
     def restart_game(self):
+        game.stop()
         self.current_level_index = 0
         self.level_points = 0
         self.total_points = 0
@@ -80,6 +81,7 @@ class Game:
         self.username = ""
         self.levels = []
         self.current_level = None
+        
 
         for level_index, level_data in enumerate(level_map):
             level = Level(self.screen, level_data, level_index)
@@ -104,8 +106,8 @@ class Game:
     def display_form(self):
 
         self.screen.fill((0, 0, 0))
-        width = 300
-        height = 50
+        width = 320
+        height = 60
 
         form = TextInput(((screen_width / 2) - (width / 2)),
                          screen_height / 4, width, height, 25)

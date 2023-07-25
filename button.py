@@ -3,8 +3,9 @@ from settings import *
 
 
 class Button:
-    def __init__(self, image, image_hover,  offset=0) -> None:
+    def __init__(self, image, image_hover,  offset=0,  type = "") -> None:
 
+        self.type = type
         self.image = image
         self.image_hover = image_hover
         self.current_image = self.image
@@ -41,8 +42,8 @@ class Button:
         self.get_hover()
         self.change_color()
 
-        # if self.text == "back":
-        #     self.rect.x = 100
-        #     self.rect.y = 100
+        if self.type == "back":
+            self.rect.x = 100
+            self.rect.y = 100
 
         screen.blit(self.current_image, self.rect)

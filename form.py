@@ -18,6 +18,10 @@ class TextInput:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.QUIT:
+                pygame.quit()
+                
+
             if event.key == pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             else:
@@ -32,7 +36,7 @@ class TextInput:
                 self.done = True
 
     def draw(self, screen, width, height):
-        header = self.font.render("Ingresa tu nombre", True, (255, 255, 255))
+        header = self.font.render("Choose your nickname", True, (255, 255, 255))
         header_rect = pygame.Rect(
             width, height, ((screen_width / 2) - (width / 2)), screen_height / 4)
 

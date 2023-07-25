@@ -110,7 +110,7 @@ class RankingMenu(Menu):
             center=((screen_width / 2), screen_height / 4))
         self.buttons = [
             Button(pygame.image.load("./assets/menu/buttons/back.png"),
-                   pygame.image.load("./assets/menu/buttons/back_hover.png")),
+                   pygame.image.load("./assets/menu/buttons/back_hover.png"), 80, "back"),
 
         ]
         self.scores = []
@@ -148,8 +148,13 @@ class GameOver(Menu):
         self.header_rect = self.header.get_rect(
             center=((screen_width / 2), screen_height / 4))
         self.buttons = [
-            Button("restart", white, white),
-            Button("exit", white, white, 50)
+            Button(pygame.image.load("./assets/menu/buttons/restart.png"),
+                   pygame.image.load("./assets/menu/buttons/restart_hover.png")),
+          
+            
+
+            Button(pygame.image.load("./assets/menu/buttons/exit.png"),
+                   pygame.image.load("./assets/menu/buttons/exit_hover.png"), 160)
         ]
 
     def handle_button(self):
